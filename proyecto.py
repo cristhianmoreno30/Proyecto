@@ -1,15 +1,104 @@
+# -*- coding: utf-8 -*-
 #Importamos Las librerias
 from tkinter import *
 import time
 
 
+#######CREANDO LA VENTANA###########################
+
+#(1)Se crea la ventana del tk
+ventana = Tk()
+#(2)Nombre de la ventana
+ventana.title("Road Figther")
+#(3)Tamaño y posicion de la ventana ( ancho x alto + posX + posY )
+ventana.geometry ("1300x900+300+50")
+
+##Fondos
+img_fondo_niveles=PhotoImage(file="fondo_menu_niveles.png")
+img_fondo_menu=PhotoImage(file="fondo_menu.png")
+img_fondo_1jugador=PhotoImage(file="fondo_menu_player1.png")
+img_fondo_2jugadores=PhotoImage(file="fondo_menu_player2.png")
+lbl_fondo_menu=Label(image=img_fondo_menu).place(x=0,y=0)
+
+
+
+
+
+#######################################
+
+#########VENTANAS##########
+
+
+
+##ventana de juego##player1
+ventana2=Toplevel(ventana)
+ventana2.geometry ("1300x900+300+50")
+ventana2.resizable(width=False,height=False)
+ventana2.iconify()
+
+
+###INICIO #####
+
+##Canvas##ventana2
+lienzo=Canvas(ventana2,width=1300,height=2900,bg="light blue")
+lienzo.pack_forget()
+
+##mapa1###player1
+mapa__1=PhotoImage(file="mapa_1.png")
+##mapa_1= lienzo.create_image(0,-28100,image = mapa__1, anchor = NW)
+
+##mapa2##player2
+mapa__2=PhotoImage(file="mapa_2.png")
+#mapa_2= lienzo.create_image(0,-28100,image = mapa__2, anchor = NW)
+
+##carro##
+carro_main_2=PhotoImage(file="car_main_2.png")
+carro_main=PhotoImage(file="car_main.png")
+##rojo=lienzo.create_image(550, 780, image = carro_main, anchor = NW)
+
+
+
+
+##solo##
+def inicio1 ():
+    global mapa_1
+    mapa_1= lienzo.create_image(0,-28100,image = mapa__1, anchor = NW)
+    rojo=lienzo.create_image(550, 780, image = carro_main, anchor = NW)
+    ventana.withdraw()
+    ventana2.deiconify()
+    lbl_player1=Label(ventana2,text=player1.get(),bg="black",fg="peru",font=("Century",20,'bold' )).place(x=1000,y=150)
+    lienzo.pack()
+    return
+
+##inicio2
+###
+def inicio2 ():
+    mapa_2= lienzo.create_image(0,0,image = mapa__2, anchor = NW)
+    rojo=lienzo.create_image(350, 780, image = carro_main, anchor = NW)
+    ventana.withdraw()
+    ventana2.deiconify()
+    lbl_player1=Label(ventana2,text=player1.get(),bg="black",fg="peru",font=("Century",20,'bold' )).place(x=1000,y=150)
+    lienzo.pack()
+    return
+
+
+##duo##
+def inicio_2 ():
+    ventana.withdraw()
+    ventana3.deiconify()
+    lbl_player1=Label(ventana3,text=player1.get(),bg="black",fg="peru",font=("Century",18 )).place(x=1415,y=150)
+    lbl_player2=Label(ventana3,text=player2.get(),bg="black",fg="peru",font=("Century",18 )).place(x=15,y=150)
+    lienzo_duo.pack()
+    return
+
+    
 #####FUNCIONES###########
 ###############################################
 
 
 ## niveles ##
-global Nivel
-Nivel= 1
+#global Nivel
+#Nivel= 1
 
 
 def menu_niveles():
@@ -18,7 +107,7 @@ def menu_niveles():
     btn_salir=Button(ventana,text="Salir",font=("Century",15),command=ventana.destroy,width=9,bg="black",fg="peru").place_forget()
     lbl_fondo_niveles=Label(image=img_fondo_niveles).place(x=0,y=0)
     btn_nvl1=Button(ventana,text="1",font=("Century",15),command=inicio1,width=2,bg="black",fg="peru").place(x=600,y=680)
-    btn_nvl2=Button(ventana,text="2",font=("Century",15),command=Nivel2,width=2,bg="black",fg="peru").place(x=660,y=680)
+    btn_nvl2=Button(ventana,text="2",font=("Century",15),command=inicio2,width=2,bg="black",fg="peru").place(x=660,y=680)
     btn_nvl3=Button(ventana,text="3",font=("Century",15),width=2,bg="black",fg="peru").place(x=720,y=680)
     btn_nvl4=Button(ventana,text="4",font=("Century",15),width=2,bg="black",fg="peru").place(x=780,y=680)
     btn_nvl5=Button(ventana,text="5",font=("Century",15),width=2,bg="black",fg="peru").place(x=840,y=680)
@@ -26,8 +115,8 @@ def menu_niveles():
     return 
 
 ##comandos para botones de nivel###
-def Nivel2 ():
-    Nivel= 2
+#def Nivel2 ():
+ #   Nivel= 2
 
 
 ##funcion de regreso ##
@@ -78,23 +167,6 @@ def jugador2():
     text_player2=Entry(ventana,textvariable=player2,bg="peru",width=25).place(x=770,y=615)
     btn_inicio=Button(ventana,text="Iniciar",font=("Century",20),command=inicio_2,width=20,bg="black",fg="orange").place(x=800,y=815)
     return
-###INICIO #####
-##solo##
-def inicio1 ():
-    ventana.withdraw()
-    ventana2.deiconify()
-    lbl_player1=Label(ventana2,text=player1.get(),bg="black",fg="peru",font=("Century",20,'bold' )).place(x=1000,y=150)
-    lienzo.pack()
-    return
-
-##duo##
-def inicio_2 ():
-    ventana.withdraw()
-    ventana3.deiconify()
-    lbl_player1=Label(ventana3,text=player1.get(),bg="black",fg="peru",font=("Century",18 )).place(x=1415,y=150)
-    lbl_player2=Label(ventana3,text=player2.get(),bg="black",fg="peru",font=("Century",18 )).place(x=15,y=150)
-    lienzo_duo.pack()
-    return
 
     
 ###########FUNCIONES CON EL TECLADO########
@@ -103,10 +175,12 @@ def inicio_2 ():
 def car_main_move(tecla):
     if tecla.char == "q":
         while True:
-            print(lienzo.coords(mapa_1)[1])
+            print(lienzo.coords(mapa_1)[0])
             lienzo.move(mapa_1,0,10)  ###limite 100####
             ventana2.update()  
-            time.sleep(0.018)   
+            time.sleep(0.018)  
+            #canvas.coords(mapa_1)[1]
+            #canvas.coords(carro)[0] 
     if tecla.char == "a":
         lienzo.move(rojo,-3,0)
         lienzo.after(1,lienzo.move(rojo,-3,0))
@@ -114,6 +188,10 @@ def car_main_move(tecla):
         lienzo.move(rojo,3,0)
         lienzo.after(1,lienzo.move(rojo,3,0))
     return
+    
+##teclas solo
+lienzo.bind("<KeyPress>",car_main_move)
+lienzo.focus_set()
 
 ## modo duo ##
 
@@ -136,33 +214,6 @@ def car_main_move_1(tecla):
     
 ############################################################
 
-    
-    
-
-
-
-    
-    
-    
-############################################################
-
-
-#######CREANDO LA VENTANA###########################
-
-#(1)Se crea la ventana del tk
-ventana = Tk()
-#(2)Nombre de la ventana
-ventana.title("Road Figther")
-#(3)Tamaño y posicion de la ventana ( ancho x alto + posX + posY )
-ventana.geometry ("1300x900+300+50")
-
-##Fondos
-img_fondo_niveles=PhotoImage(file="fondo_menu_niveles.png")
-img_fondo_menu=PhotoImage(file="fondo_menu.png")
-img_fondo_1jugador=PhotoImage(file="fondo_menu_player1.png")
-img_fondo_2jugadores=PhotoImage(file="fondo_menu_player2.png")
-lbl_fondo_menu=Label(image=img_fondo_menu).place(x=0,y=0)
-
 ##botenes de jugadores
 btn_jugadores=Button(ventana,text="Jugadores",font=("Century",15),command=menu_jugadores,width=9,bg="black",fg="peru").place(x=900,y=570)
 
@@ -179,42 +230,29 @@ btn_salir=Button(ventana,text="Salir",font=("Century",15),command=ventana.destro
 
 
 #######################################
+    
+    
+
+
+
+    
+    
+    
+############################################################
 
 
 
 
-#######################################
-
-#########VENTANAS##########
-
-##ventana de juego##player1
-ventana2=Toplevel(ventana)
-ventana2.geometry ("1300x900+300+50")
-ventana2.resizable(width=False,height=False)
-ventana2.iconify()
-
-##Canvas##player1
-lienzo=Canvas(ventana2,width=1300,height=2900,bg="light blue")
-lienzo.pack_forget()
 
 
 ##mapa1###player1
-mapa__1=PhotoImage(file="mapa_1.png")
-mapa_1= lienzo.create_image(0,-28100,image = mapa__1, anchor = NW)
+#mapa__1=PhotoImage(file="mapa_1.png")
+##mapa_1= lienzo.create_image(0,-28100,image = mapa__1, anchor = NW)
 
 ##mapa2##player2
 #mapa__2=PhotoImage(file="mapa_2.png")
 #mapa_2= lienzo.create_image(0,-28100,image = mapa__2, anchor = NW)
 
-##carro##
-carro_main_2=PhotoImage(file="car_main_2.png")
-carro_main=PhotoImage(file="car_main.png")
-rojo=lienzo.create_image(550, 780, image = carro_main, anchor = NW)
-
-
-##teclas solo
-lienzo.bind("<KeyPress>",car_main_move)
-lienzo.focus_set()
 
 
 
