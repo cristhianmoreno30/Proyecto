@@ -11,7 +11,7 @@ ventana = Tk()
 #(2)Nombre de la ventana
 ventana.title("Road Figther")
 #(3)Tamaño y posicion de la ventana ( ancho x alto + posX + posY )
-ventana.geometry ("1300x900+300+50")
+ventana.geometry ("1300x900+0+-10")
 
 ##Fondos
 img_fondo_niveles=PhotoImage(file="fondo_menu_niveles.png")
@@ -32,7 +32,7 @@ lbl_fondo_menu=Label(image=img_fondo_menu).place(x=0,y=0)
 
 ##ventana de juego##player1
 ventana2=Toplevel(ventana)
-ventana2.geometry ("1300x900+300+50")
+ventana2.geometry ("1300x900+0+-10")
 ventana2.resizable(width=False,height=False)
 ventana2.iconify()
 
@@ -63,6 +63,7 @@ carro_main=PhotoImage(file="car_main.png")
 def inicio1 ():
     global mapa_1
     mapa_1= lienzo.create_image(0,-28100,image = mapa__1, anchor = NW)
+    global rojo
     rojo=lienzo.create_image(550, 780, image = carro_main, anchor = NW)
     ventana.withdraw()
     ventana2.deiconify()
@@ -96,9 +97,6 @@ def inicio_2 ():
 ###############################################
 
 
-## niveles ##
-#global Nivel
-#Nivel= 1
 
 
 def menu_niveles():
@@ -114,9 +112,6 @@ def menu_niveles():
     btn_regreso=Button(ventana,text="Regresar",font=("Century",15),command=regreso,width=9,bg="black",fg="peru").place(x=1179,y=859)
     return 
 
-##comandos para botones de nivel###
-#def Nivel2 ():
- #   Nivel= 2
 
 
 ##funcion de regreso ##
@@ -173,14 +168,22 @@ def jugador2():
 ##modo solo ###
 
 def car_main_move(tecla):
+    from timeit import default_timer
     if tecla.char == "q":
-        while True:
-            print(lienzo.coords(mapa_1)[0])
-            lienzo.move(mapa_1,0,10)  ###limite 100####
-            ventana2.update()  
-            time.sleep(0.018)  
-            #canvas.coords(mapa_1)[1]
-            #canvas.coords(carro)[0] 
+        start = default_timer()
+        print(start)
+        while True :
+            #print(lienzo.coords(rojo)[0])
+            lienzo.after(15,lienzo.move(mapa_1,0,10))  ###limite 100####
+            if (lienzo.coords(rojo)[0]) < 364: #364 LIMITE EN LA IZQ
+                break
+            if (lienzo.coords(rojo)[0]) > 724:
+                break
+            if (lienzo.coords(mapa_1)[1]) > -10:
+                print("Tiempo de ejecucion: {}".format(default_timer()-start)) #54.14532494620096 tiempo de duracion
+                break
+            ventana2.update()
+ 
     if tecla.char == "a":
         lienzo.move(rojo,-3,0)
         lienzo.after(1,lienzo.move(rojo,-3,0))
@@ -245,15 +248,6 @@ btn_salir=Button(ventana,text="Salir",font=("Century",15),command=ventana.destro
 
 
 
-##mapa1###player1
-#mapa__1=PhotoImage(file="mapa_1.png")
-##mapa_1= lienzo.create_image(0,-28100,image = mapa__1, anchor = NW)
-
-##mapa2##player2
-#mapa__2=PhotoImage(file="mapa_2.png")
-#mapa_2= lienzo.create_image(0,-28100,image = mapa__2, anchor = NW)
-
-
 
 
 
@@ -265,7 +259,7 @@ btn_salir=Button(ventana,text="Salir",font=("Century",15),command=ventana.destro
 
 ##ventanas dobles ## duo jugadores
 ventana3=Toplevel(ventana)
-ventana3.geometry ("1600x950+200+20")
+ventana3.geometry ("1600x950+-10+-10")
 ventana3.resizable(width=False,height=False)
 ventana3.iconify()
 
