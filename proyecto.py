@@ -40,6 +40,8 @@ def inicio1 ():
     mapa__1 = PhotoImage(file="mapa_1.png")
     global carro_main
     carro_main = PhotoImage(file="car_main.png")
+    global explosion
+    explosion = PhotoImage(file="explosion.png")
     mapa_1= lienzo.create_image(0,-28380,image = mapa__1, anchor = NW)
     rojo=lienzo.create_image(368, 500, image = carro_main, anchor = NW)
     datos= lienzo.create_text(780,100,fill="peru",font="Times 22 bold",text=player1.get())
@@ -55,9 +57,23 @@ def inicio1 ():
                 #print(lienzo.coords(rojo)[0])
                 lienzo.after(15, lienzo.move(mapa_1, 0, 10))
                 if (lienzo.coords(rojo)[0]) < 254:
-                    break
+                    explo = lienzo.create_image(lienzo.coords(rojo)[0], lienzo.coords(rojo)[1], image=explosion,
+                                                anchor=NW)
+                    lienzo.itemconfig(rojo, state="hidden")
+                    lienzo.update()
+                    time.sleep(0.5)
+                    lienzo.delete(explo)
+                    lienzo.itemconfig(rojo, state="disabled")
+                    lienzo.coords(rojo, 368, 500)
                 if (lienzo.coords(rojo)[0]) > 494:
-                    break
+                    explo = lienzo.create_image(lienzo.coords(rojo)[0], lienzo.coords(rojo)[1], image=explosion,
+                                                anchor=NW)
+                    lienzo.itemconfig(rojo, state="hidden")
+                    lienzo.update()
+                    time.sleep(0.5)
+                    lienzo.delete(explo)
+                    lienzo.itemconfig(rojo, state="disabled")
+                    lienzo.coords(rojo, 368, 500)
                 if (lienzo.coords(mapa_1)[1]) > -10:
                     # print("Tiempo de ejecucion: {}".format(default_timer()-start)) #54.14532494620096 tiempo de duracion
                     break
@@ -88,6 +104,8 @@ def inicio2 ():
     mapa__2 = PhotoImage(file="mapa_2.png")
     global carro_main
     carro_main = PhotoImage(file="car_main.png")
+    global explosion
+    explosion = PhotoImage(file="explosion.png")
     mapa_2= lienzo.create_image(0,-28380,image = mapa__2, anchor = NW)
     rojo=lienzo.create_image(386, 500, image = carro_main, anchor = NW)
     datos = lienzo.create_text(700, 100, fill="black", font="Times 22 bold", text=player1.get())
@@ -98,9 +116,23 @@ def inicio2 ():
             while True:
                 lienzo.after(15, lienzo.move(mapa_2, 0, 10))
                 if (lienzo.coords(rojo)[0]) < 284:
-                    break
+                    explo = lienzo.create_image(lienzo.coords(rojo)[0], lienzo.coords(rojo)[1], image=explosion,
+                                                anchor=NW)
+                    lienzo.itemconfig(rojo, state="hidden")
+                    lienzo.update()
+                    time.sleep(0.5)
+                    lienzo.delete(explo)
+                    lienzo.itemconfig(rojo, state="disabled")
+                    lienzo.coords(rojo, 386, 500)
                 if (lienzo.coords(rojo)[0]) > 500:
-                    break
+                    explo = lienzo.create_image(lienzo.coords(rojo)[0], lienzo.coords(rojo)[1], image=explosion,
+                                                anchor=NW)
+                    lienzo.itemconfig(rojo, state="hidden")
+                    lienzo.update()
+                    time.sleep(0.5)
+                    lienzo.delete(explo)
+                    lienzo.itemconfig(rojo, state="disabled")
+                    lienzo.coords(rojo, 386, 500)
                 if (lienzo.coords(mapa_2)[1]) > -10:
                     break
                 ventana2.update()
@@ -130,6 +162,8 @@ def inicio3 ():
     mapa__3 = PhotoImage(file="mapa_3.png")
     global carro_main
     carro_main = PhotoImage(file="car_main.png")
+    global explosion
+    explosion = PhotoImage(file="explosion.png")
     mapa_3= lienzo.create_image(0,-28380,image = mapa__3, anchor = NW)
     rojo=lienzo.create_image(446, 500, image = carro_main, anchor = NW)
     datos = lienzo.create_text(780, 100, fill="black", font="Times 25 bold", text=player1.get())
@@ -140,9 +174,23 @@ def inicio3 ():
             while True:
                 lienzo.after(15, lienzo.move(mapa_3, 0, 10))
                 if (lienzo.coords(rojo)[0]) < 338:
-                    break
+                    explo = lienzo.create_image(lienzo.coords(rojo)[0], lienzo.coords(rojo)[1], image=explosion,
+                                                anchor=NW)
+                    lienzo.itemconfig(rojo, state="hidden")
+                    lienzo.update()
+                    time.sleep(0.5)
+                    lienzo.delete(explo)
+                    lienzo.itemconfig(rojo, state="disabled")
+                    lienzo.coords(rojo, 446, 500)
                 if (lienzo.coords(rojo)[0]) > 554:
-                    break
+                    explo = lienzo.create_image(lienzo.coords(rojo)[0], lienzo.coords(rojo)[1], image=explosion,
+                                                anchor=NW)
+                    lienzo.itemconfig(rojo, state="hidden")
+                    lienzo.update()
+                    time.sleep(0.5)
+                    lienzo.delete(explo)
+                    lienzo.itemconfig(rojo, state="disabled")
+                    lienzo.coords(rojo, 446, 500)
                 if (lienzo.coords(mapa_3)[1]) > -10:
                     break
                 ventana2.update()
@@ -173,8 +221,10 @@ def inicio4 ():
     mapa__4 = PhotoImage(file="mapa_4.png")
     global carro_main
     carro_main = PhotoImage(file="car_main.png")
-    mapa_4= lienzo.create_image(0,-28380,image = mapa__4, anchor = NW)
-    rojo=lienzo.create_image(428, 500, image = carro_main, anchor = NW)
+    global explosion
+    explosion= PhotoImage(file="explosion.png")
+    mapa_4 = lienzo.create_image(0,-28380,image = mapa__4, anchor = NW)
+    rojo =lienzo.create_image(428, 500, image = carro_main, anchor = NW)
     datos = lienzo.create_text(780, 100, fill="black", font="Times 25 bold", text=player1.get())
     lienzo.pack()
     ventana.withdraw()
@@ -183,9 +233,21 @@ def inicio4 ():
             while True:
                 lienzo.after(15, lienzo.move(mapa_4, 0, 10))
                 if (lienzo.coords(rojo)[0]) < 326:
-                    break
+                    explo = lienzo.create_image(lienzo.coords(rojo)[0], lienzo.coords(rojo)[1], image=explosion,anchor=NW)
+                    lienzo.itemconfig(rojo,state="hidden")
+                    lienzo.update()
+                    time.sleep(0.5)
+                    lienzo.delete(explo)
+                    lienzo.itemconfig(rojo,state="disabled")
+                    lienzo.coords(rojo,428,500)
                 if (lienzo.coords(rojo)[0]) > 554:
-                    break
+                    explo = lienzo.create_image(lienzo.coords(rojo)[0], lienzo.coords(rojo)[1], image=explosion,anchor=NW)
+                    lienzo.itemconfig(rojo, state="hidden")
+                    lienzo.update()
+                    time.sleep(0.5)
+                    lienzo.delete(explo)
+                    lienzo.itemconfig(rojo, state="disabled")
+                    lienzo.coords(rojo, 428, 500)
                 if (lienzo.coords(mapa_4)[1]) > -10:
                     break
                 ventana2.update()
@@ -215,6 +277,8 @@ def inicio5 ():
     mapa__5 = PhotoImage(file="mapa_5.png")
     global carro_main
     carro_main = PhotoImage(file="car_main.png")
+    global explosion
+    explosion = PhotoImage(file="explosion.png")
     mapa_5= lienzo.create_image(0,-28380,image = mapa__5, anchor = NW)
     rojo=lienzo.create_image(434, 500, image = carro_main, anchor = NW)
     datos = lienzo.create_text(780, 100, fill="black", font="Times 25 bold", text=player1.get())
@@ -225,9 +289,23 @@ def inicio5 ():
             while True:
                 lienzo.after(15, lienzo.move(mapa_5, 0, 10))
                 if (lienzo.coords(rojo)[0]) < 308:
-                    break
+                    explo = lienzo.create_image(lienzo.coords(rojo)[0], lienzo.coords(rojo)[1], image=explosion,
+                                                anchor=NW)
+                    lienzo.itemconfig(rojo, state="hidden")
+                    lienzo.update()
+                    time.sleep(0.5)
+                    lienzo.delete(explo)
+                    lienzo.itemconfig(rojo, state="disabled")
+                    lienzo.coords(rojo, 434, 500)
                 if (lienzo.coords(rojo)[0]) > 554:
-                    break
+                    explo = lienzo.create_image(lienzo.coords(rojo)[0], lienzo.coords(rojo)[1], image=explosion,
+                                                anchor=NW)
+                    lienzo.itemconfig(rojo, state="hidden")
+                    lienzo.update()
+                    time.sleep(0.5)
+                    lienzo.delete(explo)
+                    lienzo.itemconfig(rojo, state="disabled")
+                    lienzo.coords(rojo, 434, 500)
                 if (lienzo.coords(mapa_5)[1]) > -10:
                     break
                 ventana2.update()
@@ -258,13 +336,15 @@ def inicio_duo ():
     carro_main = PhotoImage(file="car_main.png")
     global carro_main_2
     carro_main_2 = PhotoImage(file="car_main_2.png")
+    global explosion
+    explosion = PhotoImage(file="explosion.png")
     ##lienzos
     mapa_duo= lienzo_duo.create_image(0, -28380, image=mapa_duo1, anchor=NW)
     rojo = lienzo_duo.create_image(200, 500, image=carro_main, anchor=NW)
     morado = lienzo_duo.create_image(660, 500, image=carro_main_2, anchor=NW)
     ## Nombres
-    lbl_player1=Label(ventana3,text=player1.get(),bg="black",fg="peru",font=("Century",18 )).place(x=5,y=100)
-    lbl_player2=Label(ventana3,text=player2.get(),bg="black",fg="peru",font=("Century",18 )).place(x=800,y=100)
+    datos1 = lienzo_duo.create_text(50, 100, fill="black", font="Times 16 bold", text=player1.get())
+    datos2 = lienzo_duo.create_text(830, 100, fill="black", font="Times 16 bold", text=player2.get())
     lienzo_duo.pack()
     ventana.withdraw()
     ######################### eventos
@@ -273,13 +353,44 @@ def inicio_duo ():
             while True:
                 lienzo_duo.after(8, lienzo_duo.move(mapa_duo, 0, 10))
                 if (lienzo_duo.coords(rojo)[0]) < 116:
-                    break
+                    explo = lienzo_duo.create_image(lienzo_duo.coords(rojo)[0], lienzo_duo.coords(rojo)[1], image=explosion,
+                                                anchor=NW)
+                    lienzo_duo.itemconfig(rojo, state="hidden")
+                    lienzo_duo.update()
+                    time.sleep(0.1)
+                    lienzo_duo.delete(explo)
+                    lienzo_duo.itemconfig(rojo, state="disabled")
+                    lienzo_duo.coords(rojo, 200, 500)
                 if (lienzo_duo.coords(rojo)[0]) > 302:
-                    break
+                    explo = lienzo_duo.create_image(lienzo_duo.coords(rojo)[0], lienzo_duo.coords(rojo)[1],
+                                                    image=explosion,
+                                                    anchor=NW)
+                    lienzo_duo.itemconfig(rojo, state="hidden")
+                    lienzo_duo.update()
+                    time.sleep(0.1)
+                    lienzo_duo.delete(explo)
+                    lienzo_duo.itemconfig(rojo, state="disabled")
+                    lienzo_duo.coords(rojo, 200, 500)
                 if (lienzo_duo.coords(morado)[0]) < 564:
-                    break
+                    explo = lienzo_duo.create_image(lienzo_duo.coords(morado)[0], lienzo_duo.coords(morado)[1],
+                                                    image=explosion,
+                                                    anchor=NW)
+                    lienzo_duo.itemconfig(morado, state="hidden")
+                    lienzo_duo.update()
+                    time.sleep(0.1)
+                    lienzo_duo.delete(explo)
+                    lienzo_duo.itemconfig(morado, state="disabled")
+                    lienzo_duo.coords(morado, 660, 500)
                 if (lienzo_duo.coords(morado)[0]) > 744:
-                    break
+                    explo = lienzo_duo.create_image(lienzo_duo.coords(morado)[0], lienzo_duo.coords(morado)[1],
+                                                    image=explosion,
+                                                    anchor=NW)
+                    lienzo_duo.itemconfig(morado, state="hidden")
+                    lienzo_duo.update()
+                    time.sleep(0.1)
+                    lienzo_duo.delete(explo)
+                    lienzo_duo.itemconfig(morado, state="disabled")
+                    lienzo_duo.coords(morado, 660, 500)
                 if (lienzo_duo.coords(mapa_duo)[1]) > -10:
                     break
                 ventana3.update()
