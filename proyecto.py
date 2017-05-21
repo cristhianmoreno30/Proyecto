@@ -11,7 +11,8 @@ ventana = Tk()
 #(2)Nombre de la ventana
 ventana.title("Road Figther")
 #(3)Tamaño y posicion de la ventana ( ancho x alto + posX + posY )
-ventana.geometry ("1300x900+0+-10")
+ventana.geometry ("900x623+0+0")
+ventana.resizable(width=False,height=False)
 
 ##Fondos
 img_fondo_niveles=PhotoImage(file="fondo_menu_niveles.png")
@@ -31,65 +32,182 @@ lbl_fondo_menu=Label(image=img_fondo_menu).place(x=0,y=0)
 
 
 ##ventana de juego##player1
-ventana2=Toplevel(ventana)
-ventana2.geometry ("1300x900+0+-10")
-ventana2.resizable(width=False,height=False)
-ventana2.iconify()
+#ventana2=Toplevel(ventana)
+#ventana2.geometry ("900x623+0+0")
+#ventana2.resizable(width=False,height=False)
+# ventana2.iconify()
 
 
 ###INICIO #####
 
 ##Canvas##ventana2
-lienzo=Canvas(ventana2,width=1300,height=2900,bg="light blue")
-lienzo.pack_forget()
+#lienzo=Canvas(ventana2,width=900,height=2900,bg="light blue")
+#qlienzo.pack_forget()
 
 ##mapa1###player1
-mapa__1=PhotoImage(file="mapa_1.png")
+#mapa__1=PhotoImage(file="mapa_1.png")
 ##mapa_1= lienzo.create_image(0,-28100,image = mapa__1, anchor = NW)
 
 ##mapa2##player2
-mapa__2=PhotoImage(file="mapa_2.png")
+#mapa__2=PhotoImage(file="mapa_2.png")
 #mapa_2= lienzo.create_image(0,-28100,image = mapa__2, anchor = NW)
 
 ##carro##
-carro_main_2=PhotoImage(file="car_main_2.png")
-carro_main=PhotoImage(file="car_main.png")
+#carro_main_2=PhotoImage(file="car_main_2.png")
+#carro_main=PhotoImage(file="car_main.png")
 ##rojo=lienzo.create_image(550, 780, image = carro_main, anchor = NW)
 
 
 
 
-##solo##
+##mapa 1##
 def inicio1 ():
-    global mapa_1
-    mapa_1= lienzo.create_image(0,-28100,image = mapa__1, anchor = NW)
-    global rojo
-    rojo=lienzo.create_image(550, 780, image = carro_main, anchor = NW)
-    ventana.withdraw()
-    ventana2.deiconify()
-    lbl_player1=Label(ventana2,text=player1.get(),bg="black",fg="peru",font=("Century",20,'bold' )).place(x=1000,y=150)
+    ##ventana de juego
+    ventana2 = Toplevel(ventana)
+    ventana2.geometry("900x623+0+0")
+    ventana2.resizable(width=False, height=False)
+    ##Canvas##ventana2
+    lienzo = Canvas(ventana2, width=900, height=2900, bg="light blue")
+    #########################
+    global mapa__1
+    mapa__1 = PhotoImage(file="mapa_1.png")
+    global carro_main
+    carro_main = PhotoImage(file="car_main.png")
+    mapa_1= lienzo.create_image(0,-28380,image = mapa__1, anchor = NW)
+    rojo=lienzo.create_image(368, 500, image = carro_main, anchor = NW)
+    lbl_player1=Label(ventana2,text=player1.get(),bg="black",fg="peru",font=("Century",20,'bold' )).place(x=700,y=150)
     lienzo.pack()
+    ventana.withdraw()
+    ###########################
+    def car_main_move(tecla):
+        #from timeit import default_timer
+        if tecla.char == "q":
+            #start = default_timer()
+            #print(start)
+            while True:
+                #print(lienzo.coords(rojo)[0])
+                lienzo.after(15, lienzo.move(mapa_1, 0, 10))
+                if (lienzo.coords(rojo)[0]) < 254:
+                    break
+                if (lienzo.coords(rojo)[0]) > 494:
+                    break
+                if (lienzo.coords(mapa_1)[1]) > -10:
+                    # print("Tiempo de ejecucion: {}".format(default_timer()-start)) #54.14532494620096 tiempo de duracion
+                    break
+                ventana2.update()
+        if tecla.char == "a":
+            lienzo.move(rojo, -3, 0)
+            lienzo.after(1, lienzo.move(rojo, -3, 0))
+        elif tecla.char == "d":
+            lienzo.move(rojo, 3, 0)
+            lienzo.after(1, lienzo.move(rojo, 3, 0))
+        return
+    lienzo.bind("<KeyPress>", car_main_move)
+    lienzo.focus_set()
     return
 
-##inicio2
-###
+##mapa2
+
 def inicio2 ():
-    mapa_2= lienzo.create_image(0,0,image = mapa__2, anchor = NW)
-    rojo=lienzo.create_image(350, 780, image = carro_main, anchor = NW)
-    ventana.withdraw()
-    ventana2.deiconify()
-    lbl_player1=Label(ventana2,text=player1.get(),bg="black",fg="peru",font=("Century",20,'bold' )).place(x=1000,y=150)
+    ##ventana de juego
+    ventana2 = Toplevel(ventana)
+    ventana2.geometry("900x623+0+0")
+    ventana2.resizable(width=False, height=False)
+    ##Canvas##ventana2
+    lienzo = Canvas(ventana2, width=900, height=2900, bg="light blue")
+    #########################
+    global mapa__2
+    mapa__2 = PhotoImage(file="mapa_2.png")
+    global carro_main
+    carro_main = PhotoImage(file="car_main.png")
+    mapa_2= lienzo.create_image(0,-28380,image = mapa__2, anchor = NW)
+    rojo=lienzo.create_image(386, 500, image = carro_main, anchor = NW)
+    lbl_player1=Label(ventana2,text=player1.get(),bg="black",fg="peru",font=("Century",20,'bold' )).place(x=700,y=150)
     lienzo.pack()
+    ventana.withdraw()
+    def car_main_move(tecla):
+        from timeit import default_timer
+        if tecla.char == "q":
+            start = default_timer()
+            print(start)
+            while True:
+                print(lienzo.coords(rojo)[0])
+                lienzo.after(15, lienzo.move(mapa_2, 0, 10))
+                if (lienzo.coords(rojo)[0]) < 284:
+                    break
+                if (lienzo.coords(rojo)[0]) > 500:
+                    break
+                if (lienzo.coords(mapa_2)[1]) > -10:
+                    break
+                ventana2.update()
+        if tecla.char == "a":
+            lienzo.move(rojo, -3, 0)
+            lienzo.after(1, lienzo.move(rojo, -3, 0))
+        elif tecla.char == "d":
+            lienzo.move(rojo, 3, 0)
+            lienzo.after(1, lienzo.move(rojo, 3, 0))
+        return
+    lienzo.bind("<KeyPress>", car_main_move)
+    lienzo.focus_set()
     return
 
 
 ##duo##
-def inicio_2 ():
-    ventana.withdraw()
-    ventana3.deiconify()
-    lbl_player1=Label(ventana3,text=player1.get(),bg="black",fg="peru",font=("Century",18 )).place(x=1415,y=150)
-    lbl_player2=Label(ventana3,text=player2.get(),bg="black",fg="peru",font=("Century",18 )).place(x=15,y=150)
+def inicio_duo ():
+    ##ventanas dobles ## duo jugadores
+    ventana3 = Toplevel(ventana)
+    ventana3.geometry("900x623+0+0")
+    ventana3.resizable(width=False, height=False)
+    # Canvas_duo#
+    lienzo_duo = Canvas(ventana3, width=900, height=29000, bg="light blue")
+    ##imagines###
+    global mapa_duo1
+    mapa_duo1 = PhotoImage(file="mapa_duo_1.png")
+    global carro_main
+    carro_main = PhotoImage(file="car_main.png")
+    global carro_main_2
+    carro_main_2 = PhotoImage(file="car_main_2.png")
+    ##lienzos
+    mapa_duo= lienzo_duo.create_image(0, -28380, image=mapa_duo1, anchor=NW)
+    rojo = lienzo_duo.create_image(200, 500, image=carro_main, anchor=NW)
+    morado = lienzo_duo.create_image(660, 500, image=carro_main_2, anchor=NW)
+    ## Nombres
+    lbl_player1=Label(ventana3,text=player1.get(),bg="black",fg="peru",font=("Century",18 )).place(x=5,y=100)
+    lbl_player2=Label(ventana3,text=player2.get(),bg="black",fg="peru",font=("Century",18 )).place(x=800,y=100)
     lienzo_duo.pack()
+    ventana.withdraw()
+    ######################### eventos
+    def car_main_move_1(tecla):
+        if tecla.char == "q":
+            while True:
+                lienzo_duo.after(8, lienzo_duo.move(mapa_duo, 0, 10))
+                if (lienzo_duo.coords(rojo)[0]) < 116:
+                    break
+                if (lienzo_duo.coords(rojo)[0]) > 302:
+                    break
+                if (lienzo_duo.coords(morado)[0]) < 564:
+                    break
+                if (lienzo_duo.coords(morado)[0]) > 744:
+                    break
+                if (lienzo_duo.coords(mapa_duo)[1]) > -10:
+                    break
+                ventana3.update()
+        if tecla.char == "a":
+            lienzo_duo.move(rojo, -3, 0)
+            lienzo_duo.after(0, lienzo_duo.move(rojo, -3, 0))
+        if tecla.char == "d":
+            lienzo_duo.move(rojo, 3, 0)
+            lienzo_duo.after(0, lienzo_duo.move(rojo, 3, 0))
+            #####################
+        if tecla.char == "j":
+            lienzo_duo.move(morado, -3, 0)
+            lienzo_duo.after(0, lienzo_duo.move(morado, -3, 0))
+        if tecla.char == "l":
+            lienzo_duo.move(morado, 3, 0)
+            lienzo_duo.after(0, lienzo_duo.move(morado, 3, 0))
+        return
+    lienzo_duo.bind("<KeyPress>", car_main_move_1)
+    lienzo_duo.focus_set()
     return
 
     
@@ -104,12 +222,12 @@ def menu_niveles():
     btn_jugadores=Button(ventana,text="Jugadores",font=("Century",15),width=9,bg="black",fg="peru").place_forget()
     btn_salir=Button(ventana,text="Salir",font=("Century",15),command=ventana.destroy,width=9,bg="black",fg="peru").place_forget()
     lbl_fondo_niveles=Label(image=img_fondo_niveles).place(x=0,y=0)
-    btn_nvl1=Button(ventana,text="1",font=("Century",15),command=inicio1,width=2,bg="black",fg="peru").place(x=600,y=680)
-    btn_nvl2=Button(ventana,text="2",font=("Century",15),command=inicio2,width=2,bg="black",fg="peru").place(x=660,y=680)
-    btn_nvl3=Button(ventana,text="3",font=("Century",15),width=2,bg="black",fg="peru").place(x=720,y=680)
-    btn_nvl4=Button(ventana,text="4",font=("Century",15),width=2,bg="black",fg="peru").place(x=780,y=680)
-    btn_nvl5=Button(ventana,text="5",font=("Century",15),width=2,bg="black",fg="peru").place(x=840,y=680)
-    btn_regreso=Button(ventana,text="Regresar",font=("Century",15),command=regreso,width=9,bg="black",fg="peru").place(x=1179,y=859)
+    btn_nvl1=Button(ventana,text="1",font=("Century",15),command=inicio1,width=2,bg="black",fg="peru").place(x=410,y=480)
+    btn_nvl2=Button(ventana,text="2",font=("Century",15),command=inicio2,width=2,bg="black",fg="peru").place(x=470,y=480)
+    btn_nvl3=Button(ventana,text="3",font=("Century",15),width=2,bg="black",fg="peru").place(x=530,y=480)
+    btn_nvl4=Button(ventana,text="4",font=("Century",15),width=2,bg="black",fg="peru").place(x=590,y=480)
+    btn_nvl5=Button(ventana,text="5",font=("Century",15),width=2,bg="black",fg="peru").place(x=650,y=480)
+    btn_regreso=Button(ventana,text="Regresar",font=("Century",15),command=regreso,width=9,bg="black",fg="peru").place(x=750,y=580)
     return 
 
 
@@ -118,8 +236,8 @@ def menu_niveles():
 def regreso():
     lbl_fondo_menu=Label(image=img_fondo_menu).place(x=0,y=0)
     lbl_fondo_niveles=Label(image=img_fondo_niveles).place_forget
-    btn_jugadores=Button(ventana,text="Jugadores",font=("Century",15),command=menu_jugadores,width=9,bg="black",fg="peru").place(x=900,y=570)
-    btn_salir=Button(ventana,text="Salir",font=("Century",15),command=ventana.destroy,width=9,bg="black",fg="peru").place(x=900,y=640)
+    btn_jugadores=Button(ventana,text="Jugadores",font=("Century",15),command=menu_jugadores,width=9,bg="black",fg="peru").place(x=600,y=393)
+    btn_salir=Button(ventana,text="Salir",font=("Century",15),command=ventana.destroy,width=9,bg="black",fg="peru").place(x=600,y=463)
     btn_nvl1=Button(ventana,text="1",font=("Century",15),width=2,bg="black",fg="peru").place_forget()
     btn_nvl2=Button(ventana,text="2",font=("Century",15),width=2,bg="black",fg="peru").place_forget()
     btn_nvl3=Button(ventana,text="3",font=("Century",15),width=2,bg="black",fg="peru").place_forget()
@@ -135,19 +253,19 @@ def menu_jugadores ():
     btn_niveles=Button(ventana,text="Dificultad",font=("Century",15),command=menu_niveles,width=9,bg="black",fg="peru").place_forget()
     btn_jugadores=Button(ventana,text="Jugadores",font=("Century",15),width=9,bg="black",fg="peru").place_forget()
     btn_salir=Button(ventana,text="Salir",font=("Century",15),command=ventana.destroy,width=9,bg="black",fg="peru").place_forget()
-    btn_player1=Button(ventana,text="1 Jugador",font=("Century",15),command=jugador1,width=9,bg="black",fg="peru").place(x=610,y=500)
-    btn_player2=Button(ventana,text="2 Jugadores",font=("Century",15),command=jugador2,width=9,bg="black",fg="peru").place(x=1150,y=500)
-    btn_regreso=Button(ventana,text="Regresar",font=("Century",15),command=regreso,width=9,bg="black",fg="peru").place(x=1179,y=859)
+    btn_player1=Button(ventana,text="1 Jugador",font=("Century",15),command=jugador1,width=9,bg="black",fg="peru").place(x=410,y=393)
+    btn_player2=Button(ventana,text="2 Jugadores",font=("Century",15),command=jugador2,width=9,bg="black",fg="peru").place(x=750,y=393)
+    btn_regreso=Button(ventana,text="Regresar",font=("Century",15),command=regreso,width=9,bg="black",fg="peru").place(x=750,y=580)
     return
 
 ##jugador1:
 def jugador1():
     global player1
     lbl_fondo_1jugador=Label(image=img_fondo_1jugador).place(x=0,y=0)
-    btn_regreso=Button(ventana,text="Regresar",font=("Century",15),command=regreso,width=9,bg="black",fg="peru").place(x=1179,y=859)
+    btn_regreso=Button(ventana,text="Regresar",font=("Century",15),command=regreso,width=9,bg="black",fg="peru").place(x=750,y=580)
     player1=StringVar ()
-    text_player1=Entry(ventana,textvariable=player1,bg="peru",width=25).place(x=770,y=505)
-    btn_inicio=Button(ventana,text="Iniciar",font=("Century",20),command=menu_niveles,width=20,bg="black",fg="orange").place(x=800,y=815)
+    text_player1=Entry(ventana,textvariable=player1,bg="peru",width=25).place(x=410,y=393)
+    btn_inicio=Button(ventana,text="Iniciar",font=("Century",20),command=menu_niveles,width=15,bg="black",fg="orange").place(x=550,y=493)
     return
 
 ##duo jugadores:
@@ -155,70 +273,56 @@ def jugador2():
     global player1
     global player2
     lbl_fondo_2jugador=Label(image=img_fondo_2jugadores).place(x=0,y=0)
-    btn_regreso=Button(ventana,text="Regresar",font=("Century",15),command=regreso,width=9,bg="black",fg="peru").place(x=1179,y=859)
+    btn_regreso=Button(ventana,text="Regresar",font=("Century",15),command=regreso,width=9,bg="black",fg="peru").place(x=750,y=580)
     player1=StringVar ()
-    text_player1=Entry(ventana,textvariable=player1,bg="peru",width=25).place(x=770,y=505)
+    text_player1=Entry(ventana,textvariable=player1,bg="peru",width=25).place(x=410,y=380)
     player2=StringVar ()
-    text_player2=Entry(ventana,textvariable=player2,bg="peru",width=25).place(x=770,y=615)
-    btn_inicio=Button(ventana,text="Iniciar",font=("Century",20),command=inicio_2,width=20,bg="black",fg="orange").place(x=800,y=815)
+    text_player2=Entry(ventana,textvariable=player2,bg="peru",width=25).place(x=410,y=450)
+    btn_inicio=Button(ventana,text="Iniciar",font=("Century",20),command=inicio_duo,width=15,bg="black",fg="orange").place(x=550,y=513)
     return
 
     
 ###########FUNCIONES CON EL TECLADO########
 ##modo solo ###
 
-def car_main_move(tecla):
-    from timeit import default_timer
-    if tecla.char == "q":
-        start = default_timer()
-        print(start)
-        while True :
-            #print(lienzo.coords(rojo)[0])
-            lienzo.after(15,lienzo.move(mapa_1,0,10))  ###limite 100####
-            if (lienzo.coords(rojo)[0]) < 364: #364 LIMITE EN LA IZQ
-                break
-            if (lienzo.coords(rojo)[0]) > 724:
-                break
-            if (lienzo.coords(mapa_1)[1]) > -10:
-                print("Tiempo de ejecucion: {}".format(default_timer()-start)) #54.14532494620096 tiempo de duracion
-                break
-            ventana2.update()
- 
-    if tecla.char == "a":
-        lienzo.move(rojo,-3,0)
-        lienzo.after(1,lienzo.move(rojo,-3,0))
-    elif tecla.char=="d":
-        lienzo.move(rojo,3,0)
-        lienzo.after(1,lienzo.move(rojo,3,0))
-    return
-    
+#def car_main_move(tecla):
+ #   from timeit import default_timer
+  #  if tecla.char == "q":
+   #     start = default_timer()
+    #    print(start)
+     #   while True :
+      #      print(lienzo.coords(rojo)[0])
+       #     lienzo.after(15,lienzo.move(mapa_1,0,10))
+        #    if (lienzo.coords(rojo)[0]) < 254:
+         #       break
+          #  if (lienzo.coords(rojo)[0]) > 494:
+           #     break
+            #if (lienzo.coords(mapa_1)[1]) > -10:
+             #   #print("Tiempo de ejecucion: {}".format(default_timer()-start)) #54.14532494620096 tiempo de duracion
+              #  break
+            #ventana2.update()
+    #if tecla.char == "a":
+     #   lienzo.move(rojo,-3,0)
+      #  lienzo.after(1,lienzo.move(rojo,-3,0))
+    #elif tecla.char=="d":
+     #   lienzo.move(rojo,3,0)
+      #  lienzo.after(1,lienzo.move(rojo,3,0))
+    #return
+
 ##teclas solo
-lienzo.bind("<KeyPress>",car_main_move)
-lienzo.focus_set()
+#lienzo.bind("<KeyPress>",car_main_move)
+#lienzo.focus_set()
 
 ## modo duo ##
 
-def car_main_move_1(tecla):
-    if tecla.char == "a":
-        lienzo_duo.move(rojo,-3,0)
-        lienzo_duo.after(0,lienzo_duo.move(rojo,-3,0))
-    if tecla.char=="d":
-        lienzo_duo.move(rojo,3,0)
-        lienzo_duo.after(0,lienzo_duo.move(rojo,3,0))
-    if tecla.char == "j":
-        lienzo_duo.move(morado,-3,0)
-        lienzo_duo.after(0,lienzo_duo.move(morado,-3,0))
-    if tecla.char=="l":
-        lienzo_duo.move(morado,3,0)
-        lienzo_duo.after(0,lienzo_duo.move(morado,3,0))
-    return
+
 
     
     
 ############################################################
 
 ##botenes de jugadores
-btn_jugadores=Button(ventana,text="Jugadores",font=("Century",15),command=menu_jugadores,width=9,bg="black",fg="peru").place(x=900,y=570)
+btn_jugadores=Button(ventana,text="Jugadores",font=("Century",15),command=menu_jugadores,width=9,bg="black",fg="peru").place(x=600,y=393)
 
 
 ##botone niveles
@@ -226,9 +330,9 @@ btn_jugadores=Button(ventana,text="Jugadores",font=("Century",15),command=menu_j
 
 
 ##boton  salir
-btn_salir=Button(ventana,text="Salir",font=("Century",15),command=ventana.destroy,width=9,bg="black",fg="peru").place(x=900,y=640)
+btn_salir=Button(ventana,text="Salir",font=("Century",15),command=ventana.destroy,width=9,bg="black",fg="peru").place(x=600,y=463)
 
-##boton inicio ## 
+##boton inicio ##
 # btn_inicio=Button(ventana,text="Iniciar",font=("Century",20),command=inicio,width=20,bg="black",fg="orange").place(x=800,y=815)
 
 
@@ -254,31 +358,7 @@ btn_salir=Button(ventana,text="Salir",font=("Century",15),command=ventana.destro
 ###############################################
 
 
-#############################################
 
-
-##ventanas dobles ## duo jugadores
-ventana3=Toplevel(ventana)
-ventana3.geometry ("1600x950+-10+-10")
-ventana3.resizable(width=False,height=False)
-ventana3.iconify()
-
-#Canvas_duo#
-lienzo_duo=Canvas(ventana3,width=1600,height=950,bg="light blue")
-lienzo_duo.pack_forget()
-
-
-##mapa###player1
-mapa_duo_1=PhotoImage(file="mapa_duo_1.png")
-lienzo_duo.create_image(0,0,image = mapa_duo_1, anchor = NW)
-
-##carros para duo
-rojo=lienzo_duo.create_image(430, 820, image = carro_main, anchor = NW)
-morado=lienzo_duo.create_image(1130, 820, image = carro_main_2, anchor = NW)
-
-## teclas duo
-lienzo_duo.bind("<KeyPress>",car_main_move_1)
-lienzo_duo.focus_set()
 
 
 
