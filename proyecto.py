@@ -55,7 +55,7 @@ def inicio1 ():
             #print(start)
             while True:
                 #print(lienzo.coords(rojo)[0])
-                lienzo.after(15, lienzo.move(mapa_1, 0, 10))
+                lienzo.after(8, lienzo.move(mapa_1, 0, 10))
                 if (lienzo.coords(rojo)[0]) < 254:
                     explo = lienzo.create_image(lienzo.coords(rojo)[0], lienzo.coords(rojo)[1], image=explosion,
                                                 anchor=NW)
