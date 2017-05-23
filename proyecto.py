@@ -25,6 +25,7 @@ lbl_fondo_menu=Label(image=img_fondo_menu).place(x=0,y=0)
 
 
 
+
 ##################FUNCIONES DEL JUEGO#####################
 
 ##mapa 1##
@@ -45,6 +46,7 @@ def inicio1 ():
     mapa_1= lienzo.create_image(0,-28380,image = mapa__1, anchor = NW)
     rojo=lienzo.create_image(368, 500, image = carro_main, anchor = NW)
     datos= lienzo.create_text(780,100,fill="peru",font="Times 22 bold",text=player1.get())
+    #gasolina = lienzo.create_text(780, 200, fill="peru", font="Times 22 bold", text="gasolina")
     lienzo.pack()
     ventana.withdraw()
     ###########################
@@ -53,15 +55,18 @@ def inicio1 ():
         if tecla.char == "q":
             #start = default_timer()
             #print(start)
-            while True:
+            #global Cgasolina
+            #Cgasolina = 28380
+            while (lienzo.coords(mapa_1)[1]): # and Cgasolina > 10:
                 #print(lienzo.coords(rojo)[0])
-                lienzo.after(8, lienzo.move(mapa_1, 0, 10))
+                lienzo.after(1, lienzo.move(mapa_1, 0, 10))
+                #gasolina = lienzo.create_text(780, 200, fill="peru", font="Times 22 bold", text=Cgasolina)
                 if (lienzo.coords(rojo)[0]) < 254:
                     explo = lienzo.create_image(lienzo.coords(rojo)[0], lienzo.coords(rojo)[1], image=explosion,
                                                 anchor=NW)
                     lienzo.itemconfig(rojo, state="hidden")
                     lienzo.update()
-                    time.sleep(0.5)
+                    time.sleep(0.3)
                     lienzo.delete(explo)
                     lienzo.itemconfig(rojo, state="disabled")
                     lienzo.coords(rojo, 368, 500)
@@ -70,13 +75,12 @@ def inicio1 ():
                                                 anchor=NW)
                     lienzo.itemconfig(rojo, state="hidden")
                     lienzo.update()
-                    time.sleep(0.5)
+                    time.sleep(0.3)
                     lienzo.delete(explo)
                     lienzo.itemconfig(rojo, state="disabled")
                     lienzo.coords(rojo, 368, 500)
-                if (lienzo.coords(mapa_1)[1]) > -10:
-                    # print("Tiempo de ejecucion: {}".format(default_timer()-start)) #54.14532494620096 tiempo de duracion
-                    break
+                #gasolina.after(delete)
+                #Cgasolina-= 10
                 ventana2.update()
         if tecla.char == "a":
             lienzo.move(rojo, -3, 0)
@@ -84,7 +88,6 @@ def inicio1 ():
         elif tecla.char == "d":
             lienzo.move(rojo, 3, 0)
             lienzo.after(1, lienzo.move(rojo, 3, 0))
-        return
     lienzo.bind("<KeyPress>", car_main_move)
     lienzo.focus_set()
     return
@@ -113,14 +116,14 @@ def inicio2 ():
     ventana.withdraw()
     def car_main_move(tecla):
         if tecla.char == "q":
-            while True:
+            while (lienzo.coords(mapa_2)[1]) < -10:
                 lienzo.after(15, lienzo.move(mapa_2, 0, 10))
                 if (lienzo.coords(rojo)[0]) < 284:
                     explo = lienzo.create_image(lienzo.coords(rojo)[0], lienzo.coords(rojo)[1], image=explosion,
                                                 anchor=NW)
                     lienzo.itemconfig(rojo, state="hidden")
                     lienzo.update()
-                    time.sleep(0.5)
+                    time.sleep(0.3)
                     lienzo.delete(explo)
                     lienzo.itemconfig(rojo, state="disabled")
                     lienzo.coords(rojo, 386, 500)
@@ -129,12 +132,10 @@ def inicio2 ():
                                                 anchor=NW)
                     lienzo.itemconfig(rojo, state="hidden")
                     lienzo.update()
-                    time.sleep(0.5)
+                    time.sleep(0.3)
                     lienzo.delete(explo)
                     lienzo.itemconfig(rojo, state="disabled")
                     lienzo.coords(rojo, 386, 500)
-                if (lienzo.coords(mapa_2)[1]) > -10:
-                    break
                 ventana2.update()
         if tecla.char == "a":
             lienzo.move(rojo, -3, 0)
@@ -171,14 +172,14 @@ def inicio3 ():
     ventana.withdraw()
     def car_main_move(tecla):
         if tecla.char == "q":
-            while True:
+            while (lienzo.coords(mapa_3)[1]) < -10:
                 lienzo.after(15, lienzo.move(mapa_3, 0, 10))
                 if (lienzo.coords(rojo)[0]) < 338:
                     explo = lienzo.create_image(lienzo.coords(rojo)[0], lienzo.coords(rojo)[1], image=explosion,
                                                 anchor=NW)
                     lienzo.itemconfig(rojo, state="hidden")
                     lienzo.update()
-                    time.sleep(0.5)
+                    time.sleep(0.3)
                     lienzo.delete(explo)
                     lienzo.itemconfig(rojo, state="disabled")
                     lienzo.coords(rojo, 446, 500)
@@ -187,12 +188,10 @@ def inicio3 ():
                                                 anchor=NW)
                     lienzo.itemconfig(rojo, state="hidden")
                     lienzo.update()
-                    time.sleep(0.5)
+                    time.sleep(0.3)
                     lienzo.delete(explo)
                     lienzo.itemconfig(rojo, state="disabled")
                     lienzo.coords(rojo, 446, 500)
-                if (lienzo.coords(mapa_3)[1]) > -10:
-                    break
                 ventana2.update()
         if tecla.char == "a":
             lienzo.move(rojo, -3, 0)
@@ -230,13 +229,13 @@ def inicio4 ():
     ventana.withdraw()
     def car_main_move(tecla):
         if tecla.char == "q":
-            while True:
+            while (lienzo.coords(mapa_4)[1]) < -10:
                 lienzo.after(15, lienzo.move(mapa_4, 0, 10))
                 if (lienzo.coords(rojo)[0]) < 326:
                     explo = lienzo.create_image(lienzo.coords(rojo)[0], lienzo.coords(rojo)[1], image=explosion,anchor=NW)
                     lienzo.itemconfig(rojo,state="hidden")
                     lienzo.update()
-                    time.sleep(0.5)
+                    time.sleep(0.3)
                     lienzo.delete(explo)
                     lienzo.itemconfig(rojo,state="disabled")
                     lienzo.coords(rojo,428,500)
@@ -244,12 +243,10 @@ def inicio4 ():
                     explo = lienzo.create_image(lienzo.coords(rojo)[0], lienzo.coords(rojo)[1], image=explosion,anchor=NW)
                     lienzo.itemconfig(rojo, state="hidden")
                     lienzo.update()
-                    time.sleep(0.5)
+                    time.sleep(0.3)
                     lienzo.delete(explo)
                     lienzo.itemconfig(rojo, state="disabled")
                     lienzo.coords(rojo, 428, 500)
-                if (lienzo.coords(mapa_4)[1]) > -10:
-                    break
                 ventana2.update()
         if tecla.char == "a":
             lienzo.move(rojo, -3, 0)
@@ -286,14 +283,14 @@ def inicio5 ():
     ventana.withdraw()
     def car_main_move(tecla):
         if tecla.char == "q":
-            while True:
+            while (lienzo.coords(mapa_5)[1]) < -10:
                 lienzo.after(15, lienzo.move(mapa_5, 0, 10))
                 if (lienzo.coords(rojo)[0]) < 308:
                     explo = lienzo.create_image(lienzo.coords(rojo)[0], lienzo.coords(rojo)[1], image=explosion,
                                                 anchor=NW)
                     lienzo.itemconfig(rojo, state="hidden")
                     lienzo.update()
-                    time.sleep(0.5)
+                    time.sleep(0.3)
                     lienzo.delete(explo)
                     lienzo.itemconfig(rojo, state="disabled")
                     lienzo.coords(rojo, 434, 500)
@@ -302,12 +299,10 @@ def inicio5 ():
                                                 anchor=NW)
                     lienzo.itemconfig(rojo, state="hidden")
                     lienzo.update()
-                    time.sleep(0.5)
+                    time.sleep(0.3)
                     lienzo.delete(explo)
                     lienzo.itemconfig(rojo, state="disabled")
                     lienzo.coords(rojo, 434, 500)
-                if (lienzo.coords(mapa_5)[1]) > -10:
-                    break
                 ventana2.update()
         if tecla.char == "a":
             lienzo.move(rojo, -3, 0)
@@ -350,8 +345,8 @@ def inicio_duo ():
     ######################### eventos
     def car_main_move_1(tecla):
         if tecla.char == "q":
-            while True:
-                lienzo_duo.after(8, lienzo_duo.move(mapa_duo, 0, 10))
+            while (lienzo_duo.coords(mapa_duo)[1]) < -10:
+                lienzo_duo.after(15, lienzo_duo.move(mapa_duo, 0, 10))
                 if (lienzo_duo.coords(rojo)[0]) < 116:
                     explo = lienzo_duo.create_image(lienzo_duo.coords(rojo)[0], lienzo_duo.coords(rojo)[1], image=explosion,
                                                 anchor=NW)
@@ -391,8 +386,6 @@ def inicio_duo ():
                     lienzo_duo.delete(explo)
                     lienzo_duo.itemconfig(morado, state="disabled")
                     lienzo_duo.coords(morado, 660, 500)
-                if (lienzo_duo.coords(mapa_duo)[1]) > -10:
-                    break
                 ventana3.update()
         if tecla.char == "a":
             lienzo_duo.move(rojo, -3, 0)
@@ -484,6 +477,7 @@ def jugador2():
     return
 
 ##########################################################################################
+
 
 ##########################BOTONES DEL MENU##################################
 
