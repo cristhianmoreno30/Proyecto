@@ -45,23 +45,21 @@ def inicio1 ():
     explosion = PhotoImage(file="explosion.png")
     mapa_1= lienzo.create_image(0,-28380,image = mapa__1, anchor = NW)
     rojo=lienzo.create_image(368, 500, image = carro_main, anchor = NW)
-    datos= lienzo.create_text(780,100,fill="peru",font="Times 22 bold",text=player1.get())
-    #gasolina = lienzo.create_text(780, 200, fill="peru", font="Times 22 bold", text="gasolina")
+    datos= lienzo.create_text(780,100,fill="white",font="Times 18 bold",text=player1.get())
+    Cgasolina= StringVar()
+    Cgasolina.set("Gasolina 70")
+    gasolina = Label(lienzo, textvariable=Cgasolina, fg="white", bg="black", font="Times 18 bold").place(x=730,y=200)
     lienzo.pack()
     ventana.withdraw()
     ###########################
     def car_main_move(tecla):
-        #from timeit import default_timer
         if tecla.char == "q":
-            #start = default_timer()
-            #print(start)
-            #global Cgasolina
-            #Cgasolina = 28380
-            while (lienzo.coords(mapa_1)[1]): # and Cgasolina > 10:
-                #print(lienzo.coords(rojo)[0])
-                lienzo.after(1, lienzo.move(mapa_1, 0, 10))
-                #gasolina = lienzo.create_text(780, 200, fill="peru", font="Times 22 bold", text=Cgasolina)
+            global cgasolina
+            cgasolina = 70
+            while (lienzo.coords(mapa_1)[1]) and cgasolina >= 1:
+                lienzo.after(15, lienzo.move(mapa_1, 0, 10))
                 if (lienzo.coords(rojo)[0]) < 254:
+                    cgasolina -= 10
                     explo = lienzo.create_image(lienzo.coords(rojo)[0], lienzo.coords(rojo)[1], image=explosion,
                                                 anchor=NW)
                     lienzo.itemconfig(rojo, state="hidden")
@@ -71,6 +69,7 @@ def inicio1 ():
                     lienzo.itemconfig(rojo, state="disabled")
                     lienzo.coords(rojo, 368, 500)
                 if (lienzo.coords(rojo)[0]) > 494:
+                    cgasolina -= 10
                     explo = lienzo.create_image(lienzo.coords(rojo)[0], lienzo.coords(rojo)[1], image=explosion,
                                                 anchor=NW)
                     lienzo.itemconfig(rojo, state="hidden")
@@ -79,8 +78,8 @@ def inicio1 ():
                     lienzo.delete(explo)
                     lienzo.itemconfig(rojo, state="disabled")
                     lienzo.coords(rojo, 368, 500)
-                #gasolina.after(delete)
-                #Cgasolina-= 10
+                cgasolina -= 0.01
+                Cgasolina.set("Gasolina " + str(int(cgasolina)))
                 ventana2.update()
         if tecla.char == "a":
             lienzo.move(rojo, -3, 0)
@@ -111,14 +110,20 @@ def inicio2 ():
     explosion = PhotoImage(file="explosion.png")
     mapa_2= lienzo.create_image(0,-28380,image = mapa__2, anchor = NW)
     rojo=lienzo.create_image(386, 500, image = carro_main, anchor = NW)
-    datos = lienzo.create_text(700, 100, fill="black", font="Times 22 bold", text=player1.get())
+    datos = lienzo.create_text(790, 100, fill="white", font="Times 22 bold", text=player1.get())
+    Cgasolina = StringVar()
+    Cgasolina.set("Gasolina 70")
+    gasolina = Label(lienzo, textvariable=Cgasolina, fg="white", bg="black", font="Times 18 bold").place(x=730,y=200)
     lienzo.pack()
     ventana.withdraw()
     def car_main_move(tecla):
         if tecla.char == "q":
-            while (lienzo.coords(mapa_2)[1]) < -10:
+            global cgasolina
+            cgasolina = 70
+            while (lienzo.coords(mapa_2)[1]) < -10 and cgasolina >= 1:
                 lienzo.after(15, lienzo.move(mapa_2, 0, 10))
                 if (lienzo.coords(rojo)[0]) < 284:
+                    cgasolina -= 10
                     explo = lienzo.create_image(lienzo.coords(rojo)[0], lienzo.coords(rojo)[1], image=explosion,
                                                 anchor=NW)
                     lienzo.itemconfig(rojo, state="hidden")
@@ -128,6 +133,7 @@ def inicio2 ():
                     lienzo.itemconfig(rojo, state="disabled")
                     lienzo.coords(rojo, 386, 500)
                 if (lienzo.coords(rojo)[0]) > 500:
+                    cgasolina -= 10
                     explo = lienzo.create_image(lienzo.coords(rojo)[0], lienzo.coords(rojo)[1], image=explosion,
                                                 anchor=NW)
                     lienzo.itemconfig(rojo, state="hidden")
@@ -136,6 +142,8 @@ def inicio2 ():
                     lienzo.delete(explo)
                     lienzo.itemconfig(rojo, state="disabled")
                     lienzo.coords(rojo, 386, 500)
+                cgasolina -= 0.01
+                Cgasolina.set("Gasolina " + str(int(cgasolina)))
                 ventana2.update()
         if tecla.char == "a":
             lienzo.move(rojo, -3, 0)
@@ -167,14 +175,20 @@ def inicio3 ():
     explosion = PhotoImage(file="explosion.png")
     mapa_3= lienzo.create_image(0,-28380,image = mapa__3, anchor = NW)
     rojo=lienzo.create_image(446, 500, image = carro_main, anchor = NW)
-    datos = lienzo.create_text(780, 100, fill="black", font="Times 25 bold", text=player1.get())
+    datos = lienzo.create_text(780, 100, fill="white", font="Times 18 bold", text=player1.get())
+    Cgasolina = StringVar()
+    Cgasolina.set("Gasolina 70")
+    gasolina = Label(lienzo, textvariable=Cgasolina, fg="white", bg="black", font="Times 18 bold").place(x=730, y=200)
     lienzo.pack()
     ventana.withdraw()
     def car_main_move(tecla):
         if tecla.char == "q":
-            while (lienzo.coords(mapa_3)[1]) < -10:
+            global cgasolina
+            cgasolina = 70
+            while (lienzo.coords(mapa_3)[1]) < -10 and cgasolina >= 1:
                 lienzo.after(15, lienzo.move(mapa_3, 0, 10))
                 if (lienzo.coords(rojo)[0]) < 338:
+                    cgasolina -= 10
                     explo = lienzo.create_image(lienzo.coords(rojo)[0], lienzo.coords(rojo)[1], image=explosion,
                                                 anchor=NW)
                     lienzo.itemconfig(rojo, state="hidden")
@@ -184,6 +198,7 @@ def inicio3 ():
                     lienzo.itemconfig(rojo, state="disabled")
                     lienzo.coords(rojo, 446, 500)
                 if (lienzo.coords(rojo)[0]) > 554:
+                    cgasolina -= 10
                     explo = lienzo.create_image(lienzo.coords(rojo)[0], lienzo.coords(rojo)[1], image=explosion,
                                                 anchor=NW)
                     lienzo.itemconfig(rojo, state="hidden")
@@ -192,6 +207,8 @@ def inicio3 ():
                     lienzo.delete(explo)
                     lienzo.itemconfig(rojo, state="disabled")
                     lienzo.coords(rojo, 446, 500)
+                cgasolina -= 0.01
+                Cgasolina.set("Gasolina " + str(int(cgasolina)))
                 ventana2.update()
         if tecla.char == "a":
             lienzo.move(rojo, -3, 0)
@@ -224,14 +241,20 @@ def inicio4 ():
     explosion= PhotoImage(file="explosion.png")
     mapa_4 = lienzo.create_image(0,-28380,image = mapa__4, anchor = NW)
     rojo =lienzo.create_image(428, 500, image = carro_main, anchor = NW)
-    datos = lienzo.create_text(780, 100, fill="black", font="Times 25 bold", text=player1.get())
+    datos = lienzo.create_text(780, 100, fill="white", font="Times 18 bold", text=player1.get())
+    Cgasolina = StringVar()
+    Cgasolina.set("Gasolina 70")
+    gasolina = Label(lienzo, textvariable=Cgasolina, fg="white", bg="black", font="Times 18 bold").place(x=730, y=200)
     lienzo.pack()
     ventana.withdraw()
     def car_main_move(tecla):
         if tecla.char == "q":
-            while (lienzo.coords(mapa_4)[1]) < -10:
+            global cgasolina
+            cgasolina = 70
+            while (lienzo.coords(mapa_4)[1]) < -10 and cgasolina >= 1:
                 lienzo.after(15, lienzo.move(mapa_4, 0, 10))
                 if (lienzo.coords(rojo)[0]) < 326:
+                    cgasolina -= 10
                     explo = lienzo.create_image(lienzo.coords(rojo)[0], lienzo.coords(rojo)[1], image=explosion,anchor=NW)
                     lienzo.itemconfig(rojo,state="hidden")
                     lienzo.update()
@@ -240,6 +263,7 @@ def inicio4 ():
                     lienzo.itemconfig(rojo,state="disabled")
                     lienzo.coords(rojo,428,500)
                 if (lienzo.coords(rojo)[0]) > 554:
+                    cgasolina -= 10
                     explo = lienzo.create_image(lienzo.coords(rojo)[0], lienzo.coords(rojo)[1], image=explosion,anchor=NW)
                     lienzo.itemconfig(rojo, state="hidden")
                     lienzo.update()
@@ -247,6 +271,8 @@ def inicio4 ():
                     lienzo.delete(explo)
                     lienzo.itemconfig(rojo, state="disabled")
                     lienzo.coords(rojo, 428, 500)
+                cgasolina -= 0.01
+                Cgasolina.set("Gasolina " + str(int(cgasolina)))
                 ventana2.update()
         if tecla.char == "a":
             lienzo.move(rojo, -3, 0)
@@ -278,14 +304,20 @@ def inicio5 ():
     explosion = PhotoImage(file="explosion.png")
     mapa_5= lienzo.create_image(0,-28380,image = mapa__5, anchor = NW)
     rojo=lienzo.create_image(434, 500, image = carro_main, anchor = NW)
-    datos = lienzo.create_text(780, 100, fill="black", font="Times 25 bold", text=player1.get())
+    datos = lienzo.create_text(780, 100, fill="white", font="Times 18 bold", text=player1.get())
+    Cgasolina = StringVar()
+    Cgasolina.set("Gasolina 70")
+    gasolina = Label(lienzo, textvariable=Cgasolina, fg="white", bg="black", font="Times 18 bold").place(x=730, y=200)
     lienzo.pack()
     ventana.withdraw()
     def car_main_move(tecla):
         if tecla.char == "q":
-            while (lienzo.coords(mapa_5)[1]) < -10:
+            global cgasolina
+            cgasolina = 70
+            while (lienzo.coords(mapa_5)[1]) < -10 and cgasolina >= 1:
                 lienzo.after(15, lienzo.move(mapa_5, 0, 10))
                 if (lienzo.coords(rojo)[0]) < 308:
+                    cgasolina -= 10
                     explo = lienzo.create_image(lienzo.coords(rojo)[0], lienzo.coords(rojo)[1], image=explosion,
                                                 anchor=NW)
                     lienzo.itemconfig(rojo, state="hidden")
@@ -295,6 +327,7 @@ def inicio5 ():
                     lienzo.itemconfig(rojo, state="disabled")
                     lienzo.coords(rojo, 434, 500)
                 if (lienzo.coords(rojo)[0]) > 554:
+                    cgasolina -= 10
                     explo = lienzo.create_image(lienzo.coords(rojo)[0], lienzo.coords(rojo)[1], image=explosion,
                                                 anchor=NW)
                     lienzo.itemconfig(rojo, state="hidden")
@@ -303,6 +336,8 @@ def inicio5 ():
                     lienzo.delete(explo)
                     lienzo.itemconfig(rojo, state="disabled")
                     lienzo.coords(rojo, 434, 500)
+                cgasolina -= 0.01
+                Cgasolina.set("Gasolina " + str(int(cgasolina)))
                 ventana2.update()
         if tecla.char == "a":
             lienzo.move(rojo, -3, 0)
