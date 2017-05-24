@@ -2,6 +2,7 @@
 #Importamos Las librerias
 from tkinter import *
 import time
+import random
 
 
 
@@ -47,16 +48,24 @@ def inicio1 ():
     rojo=lienzo.create_image(368, 500, image = carro_main, anchor = NW)
     datos= lienzo.create_text(780,100,fill="white",font="Times 18 bold",text=player1.get())
     Cgasolina= StringVar()
-    Cgasolina.set("Gasolina 70")
+    Cgasolina.set("Gasolina")
     gasolina = Label(lienzo, textvariable=Cgasolina, fg="white", bg="black", font="Times 18 bold").place(x=730,y=200)
     lienzo.pack()
     ventana.withdraw()
+    ###########################
+    def enemigo_aleatorio():
+        aleatorio1= random.randrange(254,494,10)
+        global mancha
+        mancha = PhotoImage(file="mancha.png")
+        lienzo.create_image(aleatorio1,0,image= mancha)
+
     ###########################
     def car_main_move(tecla):
         if tecla.char == "q":
             global cgasolina
             cgasolina = 70
-            while (lienzo.coords(mapa_1)[1]) and cgasolina >= 1:
+            enemigo_aleatorio()
+            while (lienzo.coords(mapa_1)[1])< -10:
                 lienzo.after(15, lienzo.move(mapa_1, 0, 10))
                 if (lienzo.coords(rojo)[0]) < 254:
                     cgasolina -= 10
@@ -68,7 +77,7 @@ def inicio1 ():
                     lienzo.delete(explo)
                     lienzo.itemconfig(rojo, state="disabled")
                     lienzo.coords(rojo, 368, 500)
-                if (lienzo.coords(rojo)[0]) > 494:
+                elif (lienzo.coords(rojo)[0]) > 494:
                     cgasolina -= 10
                     explo = lienzo.create_image(lienzo.coords(rojo)[0], lienzo.coords(rojo)[1], image=explosion,
                                                 anchor=NW)
@@ -78,6 +87,8 @@ def inicio1 ():
                     lienzo.delete(explo)
                     lienzo.itemconfig(rojo, state="disabled")
                     lienzo.coords(rojo, 368, 500)
+                elif cgasolina < 1:
+                    break
                 cgasolina -= 0.01
                 Cgasolina.set("Gasolina " + str(int(cgasolina)))
                 ventana2.update()
@@ -373,8 +384,8 @@ def inicio_duo ():
     rojo = lienzo_duo.create_image(200, 500, image=carro_main, anchor=NW)
     morado = lienzo_duo.create_image(660, 500, image=carro_main_2, anchor=NW)
     ## Nombres
-    datos1 = lienzo_duo.create_text(50, 100, fill="black", font="Times 16 bold", text=player1.get())
-    datos2 = lienzo_duo.create_text(830, 100, fill="black", font="Times 16 bold", text=player2.get())
+    datos1 = lienzo_duo.create_text(390, 100, fill="white", font="Times 16 bold", text=player1.get())
+    datos2 = lienzo_duo.create_text(500, 100, fill="white", font="Times 16 bold", text=player2.get())
     lienzo_duo.pack()
     ventana.withdraw()
     ######################### eventos
@@ -429,6 +440,7 @@ def inicio_duo ():
             lienzo_duo.move(rojo, 3, 0)
             lienzo_duo.after(0, lienzo_duo.move(rojo, 3, 0))
             ###########TECLAS DEL DUO##########
+    def car_main_move_2 (tecla):
         if tecla.char == "j":
             lienzo_duo.move(morado, -3, 0)
             lienzo_duo.after(0, lienzo_duo.move(morado, -3, 0))
@@ -437,10 +449,11 @@ def inicio_duo ():
             lienzo_duo.after(0, lienzo_duo.move(morado, 3, 0))
         return
     lienzo_duo.bind("<KeyPress>", car_main_move_1)
+    lienzo_duo.bind("<KeyRelease>",car_main_move_2)
     lienzo_duo.focus_set()
     return
 
-    
+
 #####FUNCIONES DEL MENU###########
 ###############################################
 
