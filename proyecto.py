@@ -799,6 +799,7 @@ def inicio5 ():
                 box_rojo = lienzo.bbox(rojo)
                 lap_rojo = lienzo.find_overlapping(box_rojo[0], box_rojo[1], box_rojo[2], box_rojo[3])
                 coords()
+                print(lienzo.coords(fighter)[1])
                 lienzo.after(4, lienzo.move(mancha, 0, 10))
                 lienzo.after(4, lienzo.move(minivan, 0, 15))
                 lienzo.after(4, lienzo.move(runner, 0, 17))
