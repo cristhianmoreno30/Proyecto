@@ -88,6 +88,7 @@ def inicio1 ():
             global cgasolina
             cgasolina = 45 #contador de gasolina
             aleatorio()
+            continuar= True
             ##### ciclo principal del juego #########
             while (lienzo.coords(mapa_1)[1])< -10:
                 ##### cajas para los limites de los elementos ########
@@ -132,12 +133,14 @@ def inicio1 ():
                 elif cgasolina < 1: # si la gasolina es menor a 1 termina el juego
                     ventana2.destroy()
                     ventana.deiconify()
+                    continuar= False
                     break
                 cgasolina -= 0.01 #cada ciclo se resta gasolina
                 Cgasolina.set("Gasolina " + str(int(cgasolina)))# y se actualiza en la barrar
                 ventana2.update()
-            ventana2.destroy() ## al lograr llegar a la meta inicia el proximo nivel
-            inicio2()
+            if continuar == True:
+            ## al lograr llegar a la meta inicia el proximo nivel
+                inicio2()
     ########## Movimiento del carro principal con las teclas ############
         if tecla.char == "a":
             lienzo.move(rojo, -3, 0)
@@ -222,6 +225,7 @@ def inicio2 ():
             global cgasolina
             cgasolina = 50
             aleatorio()
+            continuar= True
             ################
             while (lienzo.coords(mapa_2)[1]) < -10:
                 box_rojo = lienzo.bbox(rojo)
@@ -276,13 +280,14 @@ def inicio2 ():
                 elif cgasolina < 1:
                     ventana2.destroy()
                     ventana.deiconify()
+                    continuar= False
                     break
                 cgasolina -= 0.01
                 Cgasolina.set("Gasolina " + str(int(cgasolina)))
                 ventana2.update()
             ###############
-            ventana2.destroy()
-            inicio3()
+            if continuar == True:
+                inicio3()
         #########
         if tecla.char == "a":
             lienzo.move(rojo, -3, 0)
@@ -387,6 +392,7 @@ def inicio3 ():
             global cgasolina
             cgasolina = 55
             aleatorio()
+            continuar= True
         ######################
             while (lienzo.coords(mapa_3)[1]) < -10:
                 box_rojo = lienzo.bbox(rojo)
@@ -462,13 +468,14 @@ def inicio3 ():
                 elif cgasolina < 1:
                     ventana2.destroy()
                     ventana.deiconify()
+                    continuar =False
                     break
                 cgasolina -= 0.01
                 Cgasolina.set("Gasolina " + str(int(cgasolina)))
                 ventana2.update()
             ######################
-            ventana2.destroy()
-            inicio4()
+            if continuar == True:
+                inicio4()
         ############################
         if tecla.char == "a":
             lienzo.move(rojo, -3, 0)
@@ -594,6 +601,7 @@ def inicio4 ():
             global cgasolina
             cgasolina = 50
             aleatorio()
+            continuar = True
             ######################
             while (lienzo.coords(mapa_4)[1]) < -10:
                 box_rojo = lienzo.bbox(rojo)
@@ -670,13 +678,14 @@ def inicio4 ():
                 elif cgasolina < 1:
                     ventana2.destroy()
                     ventana.deiconify()
+                    continuar = False
                     break
                 cgasolina -= 0.01
                 Cgasolina.set("Gasolina " + str(int(cgasolina)))
                 ventana2.update()
             #########################################
-            ventana2.destroy()
-            inicio5()
+            if continuar == True:
+                inicio5()
         #######################################
         if tecla.char == "a":
             lienzo.move(rojo, -3, 0)
