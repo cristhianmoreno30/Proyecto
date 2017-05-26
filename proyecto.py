@@ -9,11 +9,11 @@ import random
 
 #######VENTANAS DEL MENU###########################
 
-#(1)Se crea la ventana del tk
+#Se crea la ventana del tk
 ventana = Tk()
-#(2)Nombre de la ventana
+#Nombre de la ventana
 ventana.title("Road fighter")
-#(3)Tamaño y posicion de la ventana ( ancho x alto + posX + posY )
+#Tamaño y posicion de la ventana
 ventana.geometry ("900x623+0+0")
 ventana.resizable(width=False,height=False)
 
@@ -49,9 +49,9 @@ def inicio1 ():
     global car_main_choque
     car_main_choque = PhotoImage(file="car_main_choque.png")
     #############IMAGENES EN CANVAS###################
-    mapa_1= lienzo.create_image(0,-28380,image = mapa__1, anchor = NW)
-    rojo=lienzo.create_image(368, 500, image = carro_main, anchor = NW)
-    datos= lienzo.create_text(780,100,fill="white",font="Times 18 bold",text=player1.get())
+    mapa_1= lienzo.create_image(0,-28380,image = mapa__1, anchor = NW) #se da un valor negativo en el eje Y para bajar el canvas
+    rojo=lienzo.create_image(368, 500, image = carro_main, anchor = NW) # las coordenadas en los dos ejes (X,Y) representan la mitad de la carretera
+    datos= lienzo.create_text(780,100,fill="white",font="Times 18 bold",text=player1.get()) #se crea el nombre del jugador con un StringVar
     ###############GASOLINA####################
     Cgasolina= StringVar()
     Cgasolina.set("Gasolina")
@@ -59,17 +59,17 @@ def inicio1 ():
     #######cargar widgets########
     lienzo.pack()
     ventana.withdraw() #ocultar ventana principal
-    ###########################
-    ###########################
+
+    ##########Generacion de coordenadas aleatorias#################
     def aleatorio():
         global mancha,mancha_coord1,mancha_coord2,mancha_coord3,mancha_coord4
-        mancha = lienzo.create_image(0, 0, image=mancha1, anchor=NW)
+        mancha = lienzo.create_image(-200, 0, image=mancha1, anchor=NW)
         mancha_coord1 = random.randrange(254,494)
         mancha_coord2 = random.randrange(254,494)
         mancha_coord3 = random.randrange(254,494)
         mancha_coord4 = random.randrange(254,494)
 
-
+    ##########posiciones con las cordenadas#################
     def coords():
         if (lienzo.coords(mapa_1)[1]) == -28000:
             lienzo.coords(mancha, mancha_coord1, -50)
@@ -81,19 +81,34 @@ def inicio1 ():
             lienzo.coords(mancha, mancha_coord4, -50)
 
 
-    ###########################
+#############Funcion principal##############
     def car_main_move(tecla):
+        #####tecla de inicio#######
         if tecla.char == "q":
             global cgasolina
-            cgasolina = 45
+            cgasolina = 45 #contador de gasolina
             aleatorio()
+            ##### ciclo principal del juego #########
             while (lienzo.coords(mapa_1)[1])< -10:
+                ##### cajas para los limites de los elementos ########
                 box_rojo= lienzo.bbox(rojo)
                 lap_rojo= lienzo.find_overlapping(box_rojo[0],box_rojo[1],box_rojo[2],box_rojo[3])
                 coords()
+                ## movimientos en el lienzo ####
                 lienzo.after(15,lienzo.move(mancha,0,10))
                 lienzo.after(15, lienzo.move(mapa_1, 0, 10))
-                if (lienzo.coords(rojo)[0]) < 254:
+                ### Condicionales para limites,coliciones y demas eventos en el juego #####
+                if (lienzo.coords(rojo)[0]) < 254: #limite izquierdo
+                    cgasolina -= 10 #gasolina perdída por colicion
+                    explo = lienzo.create_image(lienzo.coords(rojo)[0], lienzo.coords(rojo)[1], image=explosion,
+                                                anchor=NW) #imagen de la explosion en el canvas
+                    lienzo.itemconfig(rojo, state="hidden") # oculta el carro para simular la explosion
+                    lienzo.update()
+                    time.sleep(0.3) # se duerme la imagen 0.3 ms para regresar el carro a su posicion principal
+                    lienzo.delete(explo)
+                    lienzo.itemconfig(rojo, state="disabled")
+                    lienzo.coords(rojo, 368, 500)
+                elif (lienzo.coords(rojo)[0]) > 494: #limite derecho
                     cgasolina -= 10
                     explo = lienzo.create_image(lienzo.coords(rojo)[0], lienzo.coords(rojo)[1], image=explosion,
                                                 anchor=NW)
@@ -103,38 +118,34 @@ def inicio1 ():
                     lienzo.delete(explo)
                     lienzo.itemconfig(rojo, state="disabled")
                     lienzo.coords(rojo, 368, 500)
-                elif (lienzo.coords(rojo)[0]) > 494:
-                    cgasolina -= 10
-                    explo = lienzo.create_image(lienzo.coords(rojo)[0], lienzo.coords(rojo)[1], image=explosion,
-                                                anchor=NW)
-                    lienzo.itemconfig(rojo, state="hidden")
-                    lienzo.update()
-                    time.sleep(0.3)
-                    lienzo.delete(explo)
-                    lienzo.itemconfig(rojo, state="disabled")
-                    lienzo.coords(rojo, 368, 500)
-                elif len(lap_rojo) > 2:
+                elif lap_rojo == (1,2,4): #condicional para evaluar el overlapping de dos elementos en este caso la mancha de aceite
                     cgasolina -= 5
                     lienzo.coords(mancha, -200, 0)
                     choque = lienzo.create_image(lienzo.coords(rojo)[0], lienzo.coords(rojo)[1], image=car_main_choque,
-                                                anchor=NW)
+                                                anchor=NW) #imagen de choque para su simulacion
                     lienzo.itemconfig(rojo, state="hidden")
                     lienzo.update()
                     time.sleep(0.2)
                     lienzo.delete(choque)
                     lienzo.itemconfig(rojo, state="disabled")
-                    lienzo.after(10, lienzo.move(rojo, -15, 0))
-                elif cgasolina < 1:
+                    lienzo.after(10, lienzo.move(rojo, -15, 0)) #movimiento al chocar con los obstaculos
+                elif cgasolina < 1: # si la gasolina es menor a 1 termina el juego
+                    ventana2.destroy()
+                    ventana.deiconify()
                     break
-                cgasolina -= 0.01
-                Cgasolina.set("Gasolina " + str(int(cgasolina)))
+                cgasolina -= 0.01 #cada ciclo se resta gasolina
+                Cgasolina.set("Gasolina " + str(int(cgasolina)))# y se actualiza en la barrar
                 ventana2.update()
+            ventana2.destroy() ## al lograr llegar a la meta inicia el proximo nivel
+            inicio2()
+    ########## Movimiento del carro principal con las teclas ############
         if tecla.char == "a":
             lienzo.move(rojo, -3, 0)
             lienzo.after(3, lienzo.move(rojo, -3, 0))
         elif tecla.char == "d":
             lienzo.move(rojo, 3, 0)
             lienzo.after(3, lienzo.move(rojo, 3, 0))
+############# Recibir teclas como entrada para una funcion ##########
     lienzo.bind("<KeyPress>", car_main_move)
     lienzo.focus_set()
     return
@@ -143,13 +154,13 @@ def inicio1 ():
 ##mapa2
 
 def inicio2 ():
-    ##ventana de juego
+    ##
     ventana2 = Toplevel(ventana)
     ventana2.geometry("900x623+0+0")
     ventana2.resizable(width=False, height=False)
-    ##Canvas##ventana2
+    ##
     lienzo = Canvas(ventana2, width=900, height=2900, bg="light blue")
-    #########################
+    ########
     global mapa__2
     mapa__2 = PhotoImage(file="mapa_2.png")
     global carro_main
@@ -162,7 +173,7 @@ def inicio2 ():
     car_main_choque = PhotoImage(file="car_main_choque.png")
     global mancha1
     mancha1 = PhotoImage(file="mancha.png")
-    ###############################
+    ##############
     car_main_choque = PhotoImage(file="car_main_choque.png")
     mapa_2= lienzo.create_image(0,-28380,image = mapa__2, anchor = NW)
     rojo=lienzo.create_image(386, 500, image = carro_main, anchor = NW)
@@ -173,7 +184,7 @@ def inicio2 ():
     lienzo.pack()
     ventana.withdraw()
 
-    ###########################
+    #############
     def aleatorio():
         global minivan,mancha
         global mancha_coord1,mancha_coord2,mancha_coord3
@@ -189,7 +200,7 @@ def inicio2 ():
         minivan_coord2 = random.randrange(290, 490)
         minivan_coord3 = random.randrange(290, 490)
         minivan_coord4 = random.randrange(290, 490)
-
+    ############
     def coords():
         if (lienzo.coords(mapa_2)[1]) == -28000:
             lienzo.coords(minivan, minivan_coord1, -50)
@@ -205,12 +216,13 @@ def inicio2 ():
             lienzo.coords(mancha, mancha_coord3, -50)
         elif (lienzo.coords(mapa_2)[1]) == -9000:
             lienzo.coords(mancha, minivan_coord4 , -50)
-
+    ##############
     def car_main_move(tecla):
         if tecla.char == "q":
             global cgasolina
             cgasolina = 50
             aleatorio()
+            ################
             while (lienzo.coords(mapa_2)[1]) < -10:
                 box_rojo = lienzo.bbox(rojo)
                 lap_rojo = lienzo.find_overlapping(box_rojo[0], box_rojo[1], box_rojo[2], box_rojo[3])
@@ -218,6 +230,7 @@ def inicio2 ():
                 lienzo.after(13, lienzo.move(mancha, 0, 10))
                 lienzo.after(13, lienzo.move(minivan, 0, 12))
                 lienzo.after(13, lienzo.move(mapa_2, 0, 10))
+                ##########################################
                 if (lienzo.coords(rojo)[0]) < 284:
                     cgasolina -= 10
                     explo = lienzo.create_image(lienzo.coords(rojo)[0], lienzo.coords(rojo)[1], image=explosion,
@@ -261,17 +274,23 @@ def inicio2 ():
                     lienzo.itemconfig(rojo, state="disabled")
                     lienzo.after(10, lienzo.move(rojo, -15, 0))
                 elif cgasolina < 1:
+                    ventana2.destroy()
+                    ventana.deiconify()
                     break
                 cgasolina -= 0.01
                 Cgasolina.set("Gasolina " + str(int(cgasolina)))
                 ventana2.update()
+            ###############
+            ventana2.destroy()
+            inicio3()
+        #########
         if tecla.char == "a":
             lienzo.move(rojo, -3, 0)
             lienzo.after(1, lienzo.move(rojo, -3, 0))
         elif tecla.char == "d":
             lienzo.move(rojo, 3, 0)
             lienzo.after(1, lienzo.move(rojo, 3, 0))
-        return
+    ############
     lienzo.bind("<KeyPress>", car_main_move)
     lienzo.focus_set()
     return
@@ -280,11 +299,11 @@ def inicio2 ():
 ##mapa3
 
 def inicio3 ():
-    ##ventana de juego
+    ##
     ventana2 = Toplevel(ventana)
     ventana2.geometry("900x623+0+0")
     ventana2.resizable(width=False, height=False)
-    ##Canvas##ventana2
+    ####
     lienzo = Canvas(ventana2, width=900, height=2900, bg="light blue")
     #########################
     global mapa__3
@@ -334,7 +353,7 @@ def inicio3 ():
         runner_coord2 = random.randrange(340, 550)
         runner_coord3 = random.randrange(340, 550)
         runner_coord4 = random.randrange(340, 550)
-
+    ###############################################
     def coords():
         ##########
         if (lienzo.coords(mapa_3)[1]) == -28200:
@@ -368,6 +387,7 @@ def inicio3 ():
             global cgasolina
             cgasolina = 55
             aleatorio()
+        ######################
             while (lienzo.coords(mapa_3)[1]) < -10:
                 box_rojo = lienzo.bbox(rojo)
                 lap_rojo = lienzo.find_overlapping(box_rojo[0], box_rojo[1], box_rojo[2], box_rojo[3])
@@ -376,14 +396,16 @@ def inicio3 ():
                 lienzo.after(12, lienzo.move(minivan, 0, 13))
                 lienzo.after(12, lienzo.move(runner, 0, 13))
                 lienzo.after(12, lienzo.move(mapa_3, 0, 10))
-                if (lienzo.coords(runner)[0]) > 338 and (lienzo.coords(runner)[0]) < 446:
-                    for i in range(1):
+                ##################Movimiento del runner#########################
+                if (lienzo.coords(runner)[0]) > 338 and (lienzo.coords(runner)[0]) < 446: #en estas conidiciones se movera a la Izq
+                    for i in range(1): #el for i para que se cumpla solo una vez
                         lienzo.after(12, lienzo.move(runner, 11, 13))
                         lienzo.update()
-                if (lienzo.coords(runner)[0]) > 500:
+                if (lienzo.coords(runner)[0]) > 500: #Derecha
                     for i in range(1):
                         lienzo.after(12, lienzo.move(runner, -11, 13))
                         lienzo.update()
+                ######################################################
                 if (lienzo.coords(rojo)[0]) < 338:
                     cgasolina -= 10
                     explo = lienzo.create_image(lienzo.coords(rojo)[0], lienzo.coords(rojo)[1], image=explosion,
@@ -438,17 +460,23 @@ def inicio3 ():
                     lienzo.itemconfig(rojo, state="disabled")
                     lienzo.after(10, lienzo.move(rojo, -20, 0))
                 elif cgasolina < 1:
+                    ventana2.destroy()
+                    ventana.deiconify()
                     break
                 cgasolina -= 0.01
                 Cgasolina.set("Gasolina " + str(int(cgasolina)))
                 ventana2.update()
+            ######################
+            ventana2.destroy()
+            inicio4()
+        ############################
         if tecla.char == "a":
             lienzo.move(rojo, -3, 0)
             lienzo.after(1, lienzo.move(rojo, -3, 0))
         elif tecla.char == "d":
             lienzo.move(rojo, 3, 0)
             lienzo.after(1, lienzo.move(rojo, 3, 0))
-        return
+    #######################
     lienzo.bind("<KeyPress>", car_main_move)
     lienzo.focus_set()
     return
@@ -458,11 +486,11 @@ def inicio3 ():
 ##mapa4
 
 def inicio4 ():
-    ##ventana de juego
+    ###########
     ventana2 = Toplevel(ventana)
     ventana2.geometry("900x623+0+0")
     ventana2.resizable(width=False, height=False)
-    ##Canvas##ventana2
+    #################
     lienzo = Canvas(ventana2, width=900, height=2900, bg="light blue")
     #########################
     global mapa__4
@@ -488,6 +516,7 @@ def inicio4 ():
     Cgasolina = StringVar()
     Cgasolina.set("Gasolina")
     gasolina = Label(lienzo, textvariable=Cgasolina, fg="white", bg="black", font="Times 18 bold").place(x=730, y=200)
+    ######################
     lienzo.pack()
     ventana.withdraw()
     ##########################
@@ -521,6 +550,7 @@ def inicio4 ():
         ####
         fuel_coord1 = random.randrange(330, 550)
         fuel_coord2 = random.randrange(330, 550)
+    ################################################
 
     def coords():
         ##########
@@ -558,12 +588,13 @@ def inicio4 ():
         elif (lienzo.coords(mapa_4)[1]) == -4500:
             lienzo.coords(fuel, fuel_coord2, -50)
 
-
+####################################################
     def car_main_move(tecla):
         if tecla.char == "q":
             global cgasolina
-            cgasolina = 60
+            cgasolina = 50
             aleatorio()
+            ######################
             while (lienzo.coords(mapa_4)[1]) < -10:
                 box_rojo = lienzo.bbox(rojo)
                 lap_rojo = lienzo.find_overlapping(box_rojo[0], box_rojo[1], box_rojo[2], box_rojo[3])
@@ -573,6 +604,7 @@ def inicio4 ():
                 lienzo.after(8, lienzo.move(runner, 0, 16))
                 lienzo.after(8, lienzo.move(fuel, 0, 18))
                 lienzo.after(8, lienzo.move(mapa_4, 0, 10))
+                ############################################
                 if (lienzo.coords(runner)[0]) > 338 and (lienzo.coords(runner)[0]) < 446:
                     for i in range(1):
                         lienzo.after(15, lienzo.move(runner, 11, 16))
@@ -636,17 +668,23 @@ def inicio4 ():
                     cgasolina += 10
                     lienzo.coords(fuel, -200, 0)
                 elif cgasolina < 1:
+                    ventana2.destroy()
+                    ventana.deiconify()
                     break
                 cgasolina -= 0.01
                 Cgasolina.set("Gasolina " + str(int(cgasolina)))
                 ventana2.update()
+            #########################################
+            ventana2.destroy()
+            inicio5()
+        #######################################
         if tecla.char == "a":
             lienzo.move(rojo, -3, 0)
             lienzo.after(1, lienzo.move(rojo, -3, 0))
         elif tecla.char == "d":
             lienzo.move(rojo, 3, 0)
             lienzo.after(1, lienzo.move(rojo, 3, 0))
-        return
+    #############################################
     lienzo.bind("<KeyPress>", car_main_move)
     lienzo.focus_set()
     return
@@ -655,11 +693,11 @@ def inicio4 ():
 ##mapa5
 
 def inicio5 ():
-    ##ventana de juego
+    ####################
     ventana2 = Toplevel(ventana)
     ventana2.geometry("900x623+0+0")
     ventana2.resizable(width=False, height=False)
-    ##Canvas##ventana2
+    #####################
     lienzo = Canvas(ventana2, width=900, height=2900, bg="light blue")
     #########################
     global mapa__5
@@ -680,21 +718,23 @@ def inicio5 ():
     car_gasolina = PhotoImage(file="car_gasolina.png")
     global car_fighter
     car_fighter= PhotoImage(file="car_fighter.png")
+    ##################################################
     mapa_5= lienzo.create_image(0,-28380,image = mapa__5, anchor = NW)
     rojo=lienzo.create_image(434, 500, image = carro_main, anchor = NW)
     datos = lienzo.create_text(780, 100, fill="white", font="Times 18 bold", text=player1.get())
     Cgasolina = StringVar()
     Cgasolina.set("Gasolina")
     gasolina = Label(lienzo, textvariable=Cgasolina, fg="white", bg="black", font="Times 18 bold").place(x=730, y=200)
+    ####################################################################
     lienzo.pack()
     ventana.withdraw()
-
+##################################################################
     def aleatorio():
         global minivan,mancha,runner,fuel,fighter
         global mancha_coord1,mancha_coord2,mancha_coord3,mancha_coord4,mancha_coord5
         global minivan_coord1,minivan_coord2,minivan_coord3,minivan_coord4,minivan_coord5,minivan_coord6
         global runner_coord1,runner_coord2,runner_coord3,runner_coord4,runner_coord5,runner_coord6
-        global fuel_coord1,fuel_coord2,fuel_coords3
+        global fuel_coord1,fuel_coord2,fuel_coord3
         global fighter_coord1,fighter_coord2,fighter_coord3,fighter_coord4,fighter_coord5
         ##
         minivan = lienzo.create_image(-200, 0, image=car_minivan, anchor=NW)
@@ -732,7 +772,7 @@ def inicio5 ():
         fighter_coord3 = random.randrange(310, 550)
         fighter_coord4 = random.randrange(310, 550)
         fighter_coord5 = random.randrange(310, 550)
-
+######################################################
     def coords():
         ##########
         if (lienzo.coords(mapa_5)[1]) == -27500:
@@ -789,25 +829,36 @@ def inicio5 ():
             lienzo.coords(fighter, fighter_coord4, -50)
         elif (lienzo.coords(mapa_5)[1]) == -7300:
             lienzo.coords(fighter, fighter_coord5, -50)
-
+################################################################
     def car_main_move(tecla):
         if tecla.char == "q":
             global cgasolina
             cgasolina = 30
             aleatorio()
+            ######################3
             while (lienzo.coords(mapa_5)[1]) < -10:
                 box_rojo = lienzo.bbox(rojo)
                 lap_rojo = lienzo.find_overlapping(box_rojo[0], box_rojo[1], box_rojo[2], box_rojo[3])
                 coords()
-                print(lienzo.coords(fighter)[1])
+                ###########################
                 lienzo.after(4, lienzo.move(mancha, 0, 10))
                 lienzo.after(4, lienzo.move(minivan, 0, 15))
                 lienzo.after(4, lienzo.move(runner, 0, 17))
                 lienzo.after(4, lienzo.move(fuel, 0, 20))
                 lienzo.after(4,lienzo.move(fighter, 0, 19))
                 lienzo.after(4, lienzo.move(mapa_5, 0, 10))
+                #################### Movimiento del fighter ######################
+                if (lienzo.coords(fighter)[0]) > 310 and (lienzo.coords(fighter)[0]) < 446:#en estas condiciones
+                    for i in range(1): #observara una vez
+                        if (lienzo.coords(rojo)[0]) > 434: #donde esta el jugador
+                            lienzo.after(4, lienzo.move(fighter, 12, 15)) # para ir cerca a su posicion
 
-                if (lienzo.coords(runner)[0]) > 338 and (lienzo.coords(runner)[0]) < 446:
+                if (lienzo.coords(fighter)[0]) > 445 and (lienzo.coords(fighter)[0]) < 550:
+                    for i in range(1):
+                        if (lienzo.coords(rojo)[0]) < 435:
+                            lienzo.after(4, lienzo.move(fighter, -12, 15))
+                #########################################################################
+                if (lienzo.coords(runner)[0]) > 310 and (lienzo.coords(runner)[0]) < 446:
                     for i in range(1):
                         lienzo.after(15, lienzo.move(runner, 11, 16))
                         lienzo.update()
@@ -882,21 +933,27 @@ def inicio5 ():
                     lienzo.delete(choque)
                     lienzo.itemconfig(rojo, state="disabled")
                 elif cgasolina < 1:
+                    ventana2.destroy()
+                    ventana.deiconify()
                     break
                 cgasolina -= 0.01
                 Cgasolina.set("Gasolina " + str(int(cgasolina)))
                 ventana2.update()
+        ################################
         if tecla.char == "a":
             lienzo.move(rojo, -3, 0)
             lienzo.after(1, lienzo.move(rojo, -3, 0))
         elif tecla.char == "d":
             lienzo.move(rojo, 3, 0)
             lienzo.after(1, lienzo.move(rojo, 3, 0))
-        return
+    ############################################
     lienzo.bind("<KeyPress>", car_main_move)
     lienzo.focus_set()
     return
 ###################################################################################
+
+######### Lastimosamente no se logró avanzar con el mapa en "vs" ##################
+
 
 ##mapa_duo##
 def inicio_duo ():
@@ -927,6 +984,7 @@ def inicio_duo ():
     ######################### eventos
     def car_main_move_1(tecla):
         if tecla.char == "q":
+            #####################
             while (lienzo_duo.coords(mapa_duo)[1]) < -10:
                 lienzo_duo.after(15, lienzo_duo.move(mapa_duo, 0, 10))
                 if (lienzo_duo.coords(rojo)[0]) < 116:
@@ -989,18 +1047,21 @@ def inicio_duo ():
     lienzo_duo.focus_set()
     return
 
+##########################################################
 
-#####FUNCIONES DEL MENU###########
-###############################################
 
+############## FUNCIONES DEL MENU ####################
 
 
 ####niveles #####
 def menu_niveles():
+    ### se esconden botones que no van acorde a el menu de niveles
     btn_niveles=Button(ventana,text="Dificultad",font=("Century",15),command=menu_niveles,width=9,bg="black",fg="peru").place_forget()
     btn_jugadores=Button(ventana,text="Jugadores",font=("Century",15),width=9,bg="black",fg="peru").place_forget()
     btn_salir=Button(ventana,text="Salir",font=("Century",15),command=ventana.destroy,width=9,bg="black",fg="peru").place_forget()
+    #### se da la imagen para los niveles
     lbl_fondo_niveles=Label(image=img_fondo_niveles).place(x=0,y=0)
+    ### se crean los botones con su respectiva funcion por nivel
     btn_nvl1=Button(ventana,text="1",font=("Century",15),command=inicio1,width=2,bg="black",fg="peru").place(x=410,y=480)
     btn_nvl2=Button(ventana,text="2",font=("Century",15),command=inicio2,width=2,bg="black",fg="peru").place(x=470,y=480)
     btn_nvl3=Button(ventana,text="3",font=("Century",15),command=inicio3,width=2,bg="black",fg="peru").place(x=530,y=480)
@@ -1013,10 +1074,13 @@ def menu_niveles():
 
 ##funcion de regreso ##
 def regreso():
+    ##volver al inicio
     lbl_fondo_menu=Label(image=img_fondo_menu).place(x=0,y=0)
     lbl_fondo_niveles=Label(image=img_fondo_niveles).place_forget
+    # se colocan de nuevo los botones del menu de incio
     btn_jugadores=Button(ventana,text="Jugadores",font=("Century",15),command=menu_jugadores,width=9,bg="black",fg="peru").place(x=600,y=393)
     btn_salir=Button(ventana,text="Salir",font=("Century",15),command=ventana.destroy,width=9,bg="black",fg="peru").place(x=600,y=463)
+    #se olvidan botones que no van acorde al menu de inicio
     btn_nvl1=Button(ventana,text="1",font=("Century",15),width=2,bg="black",fg="peru").place_forget()
     btn_nvl2=Button(ventana,text="2",font=("Century",15),width=2,bg="black",fg="peru").place_forget()
     btn_nvl3=Button(ventana,text="3",font=("Century",15),width=2,bg="black",fg="peru").place_forget()
@@ -1028,33 +1092,49 @@ def regreso():
 
 ##funciones jugadores##
 def menu_jugadores ():
+    #se carga la imagen del menu de jugadores
     lbl_fondo_menu=Label(image=img_fondo_menu).place(x=0,y=0)
+    ########
     btn_niveles=Button(ventana,text="Dificultad",font=("Century",15),command=menu_niveles,width=9,bg="black",fg="peru").place_forget()
     btn_jugadores=Button(ventana,text="Jugadores",font=("Century",15),width=9,bg="black",fg="peru").place_forget()
     btn_salir=Button(ventana,text="Salir",font=("Century",15),command=ventana.destroy,width=9,bg="black",fg="peru").place_forget()
+    ####### selecion de modo de juego
     btn_player1=Button(ventana,text="1 Jugador",font=("Century",15),command=jugador1,width=9,bg="black",fg="peru").place(x=410,y=393)
     btn_player2=Button(ventana,text="2 Jugadores",font=("Century",15),command=jugador2,width=9,bg="black",fg="peru").place(x=750,y=393)
     btn_regreso=Button(ventana,text="Regresar",font=("Century",15),command=regreso,width=9,bg="black",fg="peru").place(x=750,y=580)
     return
 
-##jugador:
+##jugador principal:
 def jugador1():
+    #variable global para usarlo en otras funciones
     global player1
+    #
     lbl_fondo_1jugador=Label(image=img_fondo_1jugador).place(x=0,y=0)
+    #
     btn_regreso=Button(ventana,text="Regresar",font=("Century",15),command=regreso,width=9,bg="black",fg="peru").place(x=750,y=580)
+    # defición de variable
     player1=StringVar ()
+    #caudro de texto para el nombre:
     text_player1=Entry(ventana,textvariable=player1,bg="peru",width=25).place(x=410,y=393)
+    #
     btn_inicio=Button(ventana,text="Iniciar",font=("Century",20),command=menu_niveles,width=15,bg="black",fg="orange").place(x=550,y=493)
     return
 
+
+
+
 ##dos jugadores:
 def jugador2():
+    #
     global player1
     global player2
+    #
     lbl_fondo_2jugador=Label(image=img_fondo_2jugadores).place(x=0,y=0)
     btn_regreso=Button(ventana,text="Regresar",font=("Century",15),command=regreso,width=9,bg="black",fg="peru").place(x=750,y=580)
+    #
     player1=StringVar ()
     text_player1=Entry(ventana,textvariable=player1,bg="peru",width=25).place(x=410,y=380)
+    #
     player2=StringVar ()
     text_player2=Entry(ventana,textvariable=player2,bg="peru",width=25).place(x=410,y=450)
     btn_inicio=Button(ventana,text="Iniciar",font=("Century",20),command=inicio_duo,width=15,bg="black",fg="orange").place(x=550,y=513)
@@ -1063,7 +1143,7 @@ def jugador2():
 ##########################################################################################
 
 
-##########################BOTONES DEL MENU##################################
+##########################BOTONES DEL MENU DE INICIO##################################
 
 ##botenes de jugadores
 btn_jugadores=Button(ventana,text="Jugadores",font=("Century",15),command=menu_jugadores,width=9,bg="black",fg="peru").place(x=600,y=393)
